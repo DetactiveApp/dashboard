@@ -17,7 +17,7 @@
       <p>Active:</p>
       <input type="checkbox" />
     </div>
-    <div class="absolute w-full h-full flex justify-end items-center">
+    <div class="absolute w-full h-full flex justify-end items-center -z-50">
       <Anchor type="OUTPUT" />
     </div>
   </BaseCard>

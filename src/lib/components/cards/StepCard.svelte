@@ -37,12 +37,12 @@
         {/each}
       </select>
     </div>
-    <div class="absolute w-full h-full flex justify-end items-center">
+    <div class="absolute w-full h-full flex justify-end items-center -z-50">
       <div class="justify-start">
         <Anchor type="OUTPUT" />
       </div>
     </div>
-    <div class="absolute w-full h-full flex justify-start items-center">
+    <div class="absolute w-full h-full flex justify-start items-center -z-50">
       <div class="justify-start">
         <Anchor type="INPUT" />
       </div>
