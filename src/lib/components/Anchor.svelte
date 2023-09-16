@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-
   export let type: "INPUT" | "OUTPUT";
+
+  import { onMount } from "svelte";
 
   let isDragging: boolean = false;
   let isConnected: boolean = false;

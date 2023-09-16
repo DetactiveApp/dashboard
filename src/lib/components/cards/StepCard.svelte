@@ -1,37 +1,57 @@
 <script lang="ts">
+  export let index: number;
+
+  import BoardStore from "$lib/stores/BoardStore";
+
   import BaseCard from "./BaseCard.svelte";
   import PoiData from "$lib/assets/pois.json";
   import Anchor from "../Anchor.svelte";
-
-  let mediaType: string = "NONE";
 </script>
 
 <main>
   <BaseCard title="Step">
     <div>
       <p>Title:</p>
-      <input placeholder="Title" type="text" />
+      <input
+        placeholder="Title"
+        type="text"
+        bind:value={$BoardStore.cards[index].data.title}
+      />
     </div>
     <div>
       <p>Description:</p>
-      <textarea placeholder="Description" />
+      <textarea
+        placeholder="Description"
+        bind:value={$BoardStore.cards[index].data.description}
+      />
     </div>
     <div>
       <p>Media type:</p>
-      <select bind:value={mediaType} name="Waypoints" class="mb-1">
+      <select
+        name="Waypoints"
+        class="mb-1"
+        bind:value={$BoardStore.cards[index].data.mediaType}
+      >
         <option value="NONE">NONE</option>
         <option value="AUDIO">AUDIO</option>
         <option value="VIDEO">VIDEO</option>
       </select>
       <div>
-        {#if mediaType !== "NONE"}
-          <input placeholder="{mediaType} ASSET ID" type="text" />
+        {#if $BoardStore.cards[index].data.mediaType !== "NONE"}
+          <input
+            placeholder="{$BoardStore.cards[index].data.mediaType} ASSET ID"
+            type="text"
+            bind:value={$BoardStore.cards[index].data.assetId}
+          />
         {/if}
       </div>
     </div>
     <div>
       <p>Waypoint:</p>
-      <select name="Waypoints">
+      <select
+        name="Waypoints"
+        bind:value={$BoardStore.cards[index].data.placeType}
+      >
         {#each PoiData.pois as poi}
           <option value={poi}>{poi}</option>
         {/each}
