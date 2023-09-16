@@ -6,11 +6,11 @@
   <BaseCard title="Start">
     <div>
       <p>Story Title:</p>
-      <input type="text" />
+      <input type="text" placeholder="Title" />
     </div>
     <div>
       <p>Story Description:</p>
-      <textarea />
+      <textarea placeholder="Description" />
     </div>
     <div>
       <p>Active:</p>

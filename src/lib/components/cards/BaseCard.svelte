@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { prevent_default } from "svelte/internal";
 
   export let title: string;
 
@@ -28,6 +29,7 @@
 <main
   bind:this={card}
   on:mousedown={(e) => {
+    e.preventDefault();
     if (e.buttons == 2) {
       isDragging = true;
       deltaMouse = [e.clientX - deltaCard[0], e.clientY - deltaCard[1]];

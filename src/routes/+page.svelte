@@ -16,5 +16,7 @@
   <Nav />
   <Board>
     <StartCard />
+    <StepCard />
+    <DecisionCard />
   </Board>
 </main>

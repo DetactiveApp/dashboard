@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { onMount } from "svelte";
+
   let board: HTMLElement;
 
   let isDragging = false;
@@ -7,32 +9,36 @@
   let initialCameraX: number;
   let initialCameraY: number;
   let boardPosition: [number, number] = [0, 0];
+
+  onMount(() => {
+    addEventListener("mousemove", (e) => {
+      if (isDragging) {
+        const deltaX = e.clientX - initialMouseX;
+        const deltaY = e.clientY - initialMouseY;
+
+        boardPosition[0] = initialCameraX + deltaX;
+        boardPosition[1] = initialCameraY + deltaY;
+
+        board.style.backgroundPositionX = `${boardPosition[0]}px`;
+        board.style.backgroundPositionY = `${boardPosition[1]}px`;
+      }
+    });
+    addEventListener("mouseup", (e) => {
+      isDragging = false;
+    });
+  });
 </script>
 
 <main
   on:mousedown={(e) => {
-    if (e.buttons == 4) {
+    if (e.target !== board) return;
+    if (e.buttons == 2) {
       isDragging = true;
       initialMouseX = e.clientX;
       initialMouseY = e.clientY;
       initialCameraX = boardPosition[0];
       initialCameraY = boardPosition[1];
     }
-  }}
-  on:mousemove={(e) => {
-    if (isDragging) {
-      const deltaX = e.clientX - initialMouseX;
-      const deltaY = e.clientY - initialMouseY;
-
-      boardPosition[0] = initialCameraX + deltaX;
-      boardPosition[1] = initialCameraY + deltaY;
-
-      board.style.backgroundPositionX = `${boardPosition[0]}px`;
-      board.style.backgroundPositionY = `${boardPosition[1]}px`;
-    }
-  }}
-  on:mouseup={(e) => {
-    isDragging = false;
   }}
 >
   <section bind:this={board}>
