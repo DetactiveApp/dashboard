@@ -4,6 +4,7 @@
 
   import StepCard from "$lib/components/cards/StepCard.svelte";
   import DecisionCard from "$lib/components/cards/DecisionCard.svelte";
+  import StartCard from "$lib/components/cards/StartCard.svelte";
 </script>
 
 <main
@@ -14,7 +15,6 @@
 >
   <Nav />
   <Board>
-    <StepCard />
-    <DecisionCard />
+    <StartCard />
   </Board>
 </main>

@@ -11,7 +11,7 @@
     </div>
     <div>
       <p>Description:</p>
-      <input type="text" />
+      <textarea />
     </div>
     <div>
       <p>Waypoint:</p>
