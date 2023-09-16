@@ -1,6 +1,7 @@
 <script lang="ts">
   import BaseCard from "./BaseCard.svelte";
   import PoiData from "$lib/assets/pois.json";
+  import Anchor from "../Anchor.svelte";
 
   let mediaType: string = "NONE";
 </script>
@@ -35,6 +36,16 @@
           <option value={poi}>{poi}</option>
         {/each}
       </select>
+    </div>
+    <div class="absolute w-full h-full flex justify-end items-center">
+      <div class="justify-start">
+        <Anchor type="OUTPUT" />
+      </div>
+    </div>
+    <div class="absolute w-full h-full flex justify-start items-center">
+      <div class="justify-start">
+        <Anchor type="INPUT" />
+      </div>
     </div>
   </BaseCard>
 </main>
