@@ -11,7 +11,7 @@
 
 <main
   on:mousedown={(e) => {
-    if (e.buttons == 2) {
+    if (e.buttons == 4) {
       isDragging = true;
       initialMouseX = e.clientX;
       initialMouseY = e.clientY;
@@ -32,9 +32,7 @@
     }
   }}
   on:mouseup={(e) => {
-    if (e.button === 2) {
-      isDragging = false;
-    }
+    isDragging = false;
   }}
 >
   <section bind:this={board}>

@@ -1,7 +1,8 @@
 <script lang="ts">
   import Board from "$lib/components/Board.svelte";
   import Nav from "$lib/components/Nav.svelte";
-  import Card from "$lib/components/cards/Card.svelte";
+
+  import StepCard from "$lib/components/cards/StepCard.svelte";
 </script>
 
 <main
@@ -12,6 +13,6 @@
 >
   <Nav />
   <Board>
-    <Card title="Test Card" />
+    <StepCard />
   </Board>
 </main>

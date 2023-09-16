@@ -28,15 +28,17 @@
 <main
   bind:this={card}
   on:mousedown={(e) => {
-    if (e.buttons == 1) {
+    if (e.buttons == 2) {
       isDragging = true;
       deltaMouse = [e.clientX - deltaCard[0], e.clientY - deltaCard[1]];
     }
   }}
-  class="absolute flex justify-center w-72 h-32 overflow-hidden bg-neutral-200 border-4 border-green-500 rounded-3xl drop-shadow-2xl"
+  class="absolute flex flex-col items-center w-72 h-fit overflow-hidden bg-neutral-200 border-4 border-green-500 rounded-3xl drop-shadow-2xl pb-3"
 >
-  <header class=" h-fit w-full flex justify-center">
+  <header class="h-fit w-full flex justify-center">
     <h1 class="text-lg">{title}</h1>
   </header>
-  <slot />
+  <div>
+    <slot />
+  </div>
 </main>
