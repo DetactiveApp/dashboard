@@ -3,6 +3,7 @@
   import Nav from "$lib/components/Nav.svelte";
 
   import StepCard from "$lib/components/cards/StepCard.svelte";
+  import DecisionCard from "$lib/components/cards/DecisionCard.svelte";
 </script>
 
 <main
@@ -14,5 +15,6 @@
   <Nav />
   <Board>
     <StepCard />
+    <DecisionCard />
   </Board>
 </main>
