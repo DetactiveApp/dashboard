@@ -6,9 +6,12 @@
 
 <main
   class="flex flex-col items-center justify-center overflow-hidden w-screen h-screen"
+  on:contextmenu={(e) => {
+    e.preventDefault();
+  }}
 >
   <Nav />
   <Board>
-    <Card />
+    <Card title="Test Card" />
   </Board>
 </main>

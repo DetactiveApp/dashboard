@@ -1,19 +1,15 @@
 <script lang="ts">
-  import { children } from "svelte/internal";
+  let board: HTMLElement;
 
   let isDragging = false;
   let initialMouseX: number;
   let initialMouseY: number;
   let initialCameraX: number;
   let initialCameraY: number;
-  let board: HTMLElement;
   let boardPosition: [number, number] = [0, 0];
 </script>
 
 <main
-  on:contextmenu={(e) => {
-    e.preventDefault();
-  }}
   on:mousedown={(e) => {
     if (e.buttons == 2) {
       isDragging = true;

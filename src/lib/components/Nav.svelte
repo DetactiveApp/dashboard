@@ -1,6 +1,5 @@
-<script lang="ts">
-</script>
-
 <main>
-  <nav class="flex justify-center items-center w-screen mt-5">Storystudio</nav>
+  <nav
+    class="flex text-2xl text-center h-fit justify-center items-center w-screen mt-6"
+  />
 </main>

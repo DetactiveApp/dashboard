@@ -1,8 +1,42 @@
 <script lang="ts">
+  import { onMount } from "svelte";
+
+  export let title: string;
+
+  let card: HTMLElement;
+  let isDragging: boolean;
+  let deltaCard: [number, number] = [0, 0];
+  let deltaMouse: [number, number] = [0, 0];
+
+  onMount(() => {
+    addEventListener("mousemove", (e) => {
+      if (isDragging) {
+        deltaCard[0] = e.clientX - deltaMouse[0];
+        deltaCard[1] = e.clientY - deltaMouse[1];
+
+        card.style.left = `${deltaCard[0]}px`;
+        card.style.top = `${deltaCard[1]}px`;
+      }
+    });
+
+    addEventListener("mouseup", () => {
+      isDragging = false;
+    });
+  });
 </script>
 
 <main
-  class=" absolute flex justify-center items-center w-72 h-32 overflow-hidden bg-black rounded-3xl"
+  bind:this={card}
+  on:mousedown={(e) => {
+    if (e.buttons == 1) {
+      isDragging = true;
+      deltaMouse = [e.clientX - deltaCard[0], e.clientY - deltaCard[1]];
+    }
+  }}
+  class="absolute flex justify-center w-72 h-32 overflow-hidden bg-neutral-200 border-4 border-green-500 rounded-3xl drop-shadow-2xl"
 >
+  <header class=" h-fit w-full flex justify-center">
+    <h1 class="text-lg">{title}</h1>
+  </header>
   <slot />
 </main>
