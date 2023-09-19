@@ -3,6 +3,7 @@
   import BoardStore from "$lib/stores/BoardStore";
 
   function debugClick() {
+    $BoardStore.cards[0] = null;
     console.log("Board: ", $BoardStore);
   }
 </script>

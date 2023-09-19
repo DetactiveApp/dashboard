@@ -30,7 +30,9 @@
   <Nav />
   <Board>
     {#each $BoardStore.cards as card, i}
-      <svelte:component this={cardMappings[card.type]} index={i} />
+      {#if card}
+        <svelte:component this={cardMappings[card.type]} index={i} />
+      {/if}
     {/each}
   </Board>
 </main>
