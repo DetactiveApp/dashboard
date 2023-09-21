@@ -17,3 +17,11 @@ export interface Anchor {
 export interface BoardState {
     cards: Card[]
 }
+
+
+// Events
+export interface AnchorEvent extends CustomEvent {
+    detail: {
+        id: number;
+    };
+}

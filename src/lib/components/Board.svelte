@@ -21,11 +21,6 @@
           initialCameraY = boardPosition[1];
         }
       }
-
-      if (e.buttons === 1) {
-        const target = (e.target as HTMLElement).parentElement;
-        console.log(target);
-      }
     });
 
     addEventListener("mousemove", (e) => {
@@ -43,6 +38,10 @@
 
     addEventListener("mouseup", (e) => {
       isDragging = false;
+    });
+
+    addEventListener("anchordown", (e) => {
+      console.log((e as CustomEvent).detail);
     });
   });
 </script>

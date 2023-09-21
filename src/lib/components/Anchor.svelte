@@ -3,11 +3,11 @@
   export let card: number;
 
   import BoardStore from "$lib/stores/BoardStore";
-  import type { Anchor } from "$lib/types";
   import { onMount } from "svelte";
 
+  const id = $BoardStore.cards[card].anchors.length;
+
   onMount(() => {
-    const id = $BoardStore.cards[card].anchors.length;
     $BoardStore.cards[card].anchors[id] = {
       id: id,
       type: "INPUT",
@@ -15,8 +15,12 @@
       connection: null,
     };
   });
+
+  const anchorDownEvent: CustomEvent = new CustomEvent("anchordown", {
+    detail: { id: id },
+  });
 </script>
 
-<main id="anchor">
+<main on:mousedown={() => dispatchEvent(anchorDownEvent)}>
   <div class="w-5 h-5 bg-white rounded-full border-4 border-green-500" />
 </main>
