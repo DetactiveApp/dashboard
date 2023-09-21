@@ -57,15 +57,9 @@
         {/each}
       </select>
     </div>
-    <div class="absolute w-full h-full flex justify-end items-center -z-50">
-      <div class="justify-start">
-        <Anchor type="OUTPUT" />
-      </div>
-    </div>
-    <div class="absolute w-full h-full flex justify-start items-center -z-50">
-      <div class="justify-start">
-        <Anchor type="INPUT" />
-      </div>
+    <div class="absolute w-full h-full flex justify-between items-center -z-50">
+      <Anchor type="INPUT" card={index} />
+      <Anchor type="OUTPUT" card={index} />
     </div>
   </BaseCard>
 </main>

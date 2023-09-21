@@ -11,9 +11,9 @@
   <BaseCard title="Decision" id={index}>
     {#each $BoardStore.cards[index].data.titles as title, i}
       <p>{i + 1}. Decision:</p>
-      <div class="flex justify-start items-center w-full -z-50">
+      <div class="flex justify-cemter items-center w-full -z-50">
         <input bind:value={title} placeholder="Title" type="text" />
-        <Anchor type="OUTPUT" />
+        <Anchor type="OUTPUT" card={index} />
       </div>
     {/each}
     <div>
@@ -35,9 +35,7 @@
       {/if}
     </div>
     <div class="absolute w-full h-full flex justify-start items-center -z-50">
-      <div class="justify-start">
-        <Anchor type="INPUT" />
-      </div>
+      <Anchor type="INPUT" card={index} />
     </div>
   </BaseCard>
 </main>

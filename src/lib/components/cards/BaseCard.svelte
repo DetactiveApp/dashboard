@@ -30,13 +30,13 @@
 <main
   bind:this={card}
   on:mousedown={(e) => {
-    if (e.buttons == 2) {
+    if (e.buttons === 2) {
       isDragging = true;
       deltaMouse = [e.clientX - deltaCard[0], e.clientY - deltaCard[1]];
     }
-  }}
-  on:dblclick={(e) => {
-    id !== -1 ? ($BoardStore.cards[id].deleted = true) : null;
+
+    if (e.buttons === 4)
+      id !== -1 ? ($BoardStore.cards[id].deleted = true) : null;
   }}
   class="absolute flex flex-col items-center w-72 h-fit overflow-hidden bg-neutral-200 border-4 border-green-500 rounded-3xl drop-shadow-2xl pb-3"
 >
