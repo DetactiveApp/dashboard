@@ -9,7 +9,7 @@
 </script>
 
 <main>
-  <BaseCard title="Step">
+  <BaseCard title="Step" id={index}>
     <div>
       <p>Title:</p>
       <input

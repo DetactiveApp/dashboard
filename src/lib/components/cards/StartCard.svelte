@@ -8,7 +8,7 @@
 </script>
 
 <main>
-  <BaseCard title="Start">
+  <BaseCard title="Start" id={-1}>
     <div>
       <p>Story Title:</p>
       <input

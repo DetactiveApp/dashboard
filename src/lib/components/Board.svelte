@@ -11,6 +11,23 @@
   let boardPosition: [number, number] = [0, 0];
 
   onMount(() => {
+    addEventListener("mousedown", (e) => {
+      if (e.buttons === 2) {
+        if (e.target === board) {
+          isDragging = true;
+          initialMouseX = e.clientX;
+          initialMouseY = e.clientY;
+          initialCameraX = boardPosition[0];
+          initialCameraY = boardPosition[1];
+        }
+      }
+
+      if (e.buttons === 1) {
+        const target = (e.target as HTMLElement).parentElement;
+        console.log(target);
+      }
+    });
+
     addEventListener("mousemove", (e) => {
       if (isDragging) {
         const deltaX = e.clientX - initialMouseX;
@@ -23,24 +40,14 @@
         board.style.backgroundPositionY = `${boardPosition[1]}px`;
       }
     });
+
     addEventListener("mouseup", (e) => {
       isDragging = false;
     });
   });
 </script>
 
-<main
-  on:mousedown={(e) => {
-    if (e.target !== board) return;
-    if (e.buttons == 2) {
-      isDragging = true;
-      initialMouseX = e.clientX;
-      initialMouseY = e.clientY;
-      initialCameraX = boardPosition[0];
-      initialCameraY = boardPosition[1];
-    }
-  }}
->
+<main>
   <section bind:this={board}>
     <div
       style={`transform: translate(${boardPosition[0]}px, ${boardPosition[1]}px);`}

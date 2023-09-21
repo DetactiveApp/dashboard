@@ -30,7 +30,7 @@
   <Nav />
   <Board>
     {#each $BoardStore.cards as card, i}
-      {#if card}
+      {#if !card.deleted}
         <svelte:component this={cardMappings[card.type]} index={i} />
       {/if}
     {/each}

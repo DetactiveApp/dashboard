@@ -8,7 +8,7 @@
 </script>
 
 <main>
-  <BaseCard title="Decision">
+  <BaseCard title="Decision" id={index}>
     {#each $BoardStore.cards[index].data.titles as title, i}
       <p>{i + 1}. Decision:</p>
       <div class="flex justify-start items-center w-full -z-50">
