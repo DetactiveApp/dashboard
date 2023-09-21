@@ -5,19 +5,23 @@
   import BoardStore from "$lib/stores/BoardStore";
   import { onMount } from "svelte";
 
-  const id = $BoardStore.cards[card].anchors.length;
+  let id: number = 0;
+  let anchorDownEvent: CustomEvent = new CustomEvent("anchordown", {});
+  let anchorMoveEvent: CustomEvent = new CustomEvent("anchormove", {});
+  let anchorUpEvent: CustomEvent = new CustomEvent("anchorup", {});
 
   onMount(() => {
+    id = $BoardStore.cards[card].anchors.length;
     $BoardStore.cards[card].anchors[id] = {
       id: id,
       type: "INPUT",
       offset: [0, 0],
       connection: null,
     };
-  });
 
-  const anchorDownEvent: CustomEvent = new CustomEvent("anchordown", {
-    detail: { id: id },
+    anchorDownEvent = new CustomEvent("anchordown", {
+      detail: { id: id },
+    });
   });
 </script>
 
