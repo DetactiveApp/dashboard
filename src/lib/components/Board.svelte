@@ -40,6 +40,7 @@
       isDragging = false;
     });
 
+    // Anchor Events
     addEventListener("anchordown", (e) => {
       console.log((e as CustomEvent).detail);
     });

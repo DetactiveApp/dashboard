@@ -8,7 +8,7 @@ export interface Card {
 }
 
 export interface Anchor {
-    id: number,
+    id: string,
     type: "INPUT" | "OUTPUT"
     offset: [number, number],
     connection: number | null,
@@ -16,12 +16,4 @@ export interface Anchor {
 
 export interface BoardState {
     cards: Card[]
-}
-
-
-// Events
-export interface AnchorEvent extends CustomEvent {
-    detail: {
-        id: number;
-    };
 }

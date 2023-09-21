@@ -6,6 +6,8 @@
   import { onMount } from "svelte";
 
   let id: number = 0;
+  let offset: [number, number] = [0, 0];
+
   let anchorDownEvent: CustomEvent = new CustomEvent("anchordown", {});
   let anchorMoveEvent: CustomEvent = new CustomEvent("anchormove", {});
   let anchorUpEvent: CustomEvent = new CustomEvent("anchorup", {});
@@ -13,14 +15,14 @@
   onMount(() => {
     id = $BoardStore.cards[card].anchors.length;
     $BoardStore.cards[card].anchors[id] = {
-      id: id,
-      type: "INPUT",
+      id: `${card},${id}`,
+      type: type,
       offset: [0, 0],
       connection: null,
     };
 
     anchorDownEvent = new CustomEvent("anchordown", {
-      detail: { id: id },
+      detail: { id: `${card},${id}`, type: type, offset: offset },
     });
   });
 </script>
