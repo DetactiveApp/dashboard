@@ -7,17 +7,16 @@
 
   let card: HTMLElement;
   let isDragging: boolean;
-  let deltaCard: [number, number] = [0, 0];
   let deltaMouse: [number, number] = [0, 0];
 
   onMount(() => {
     addEventListener("mousemove", (e) => {
       if (isDragging) {
-        deltaCard[0] = e.clientX - deltaMouse[0];
-        deltaCard[1] = e.clientY - deltaMouse[1];
+        $BoardStore.cards[id].offset[0] = e.clientX - deltaMouse[0];
+        $BoardStore.cards[id].offset[1] = e.clientY - deltaMouse[1];
 
-        card.style.left = `${deltaCard[0]}px`;
-        card.style.top = `${deltaCard[1]}px`;
+        card.style.left = `${$BoardStore.cards[id].offset[0]}px`;
+        card.style.top = `${$BoardStore.cards[id].offset[1]}px`;
       }
     });
 
@@ -32,11 +31,14 @@
   on:mousedown={(e) => {
     if (e.buttons === 2) {
       isDragging = true;
-      deltaMouse = [e.clientX - deltaCard[0], e.clientY - deltaCard[1]];
+      deltaMouse = [
+        e.clientX - $BoardStore.cards[id].offset[0],
+        e.clientY - $BoardStore.cards[id].offset[1],
+      ];
     }
 
     if (e.buttons === 4)
-      id !== -1 ? ($BoardStore.cards[id].deleted = true) : null;
+      id !== 0 ? ($BoardStore.cards[id].deleted = true) : null;
   }}
   class="absolute flex flex-col items-center w-72 h-fit overflow-hidden bg-neutral-200 border-4 border-green-500 rounded-3xl drop-shadow-2xl pb-3"
 >

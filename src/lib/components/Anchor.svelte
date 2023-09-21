@@ -6,7 +6,8 @@
   import { onMount } from "svelte";
 
   let id: number = 0;
-  let offset: [number, number] = [0, 0];
+  let anchor: HTMLElement;
+  let cardElement: HTMLElement;
 
   let anchorDownEvent: CustomEvent = new CustomEvent("anchordown", {});
   let anchorMoveEvent: CustomEvent = new CustomEvent("anchormove", {});
@@ -22,11 +23,18 @@
     };
 
     anchorDownEvent = new CustomEvent("anchordown", {
-      detail: { id: `${card},${id}`, type: type, offset: offset },
+      detail: {
+        id: `${card},${id}`,
+        type: type,
+        offset: $BoardStore.cards[card].anchors[id].offset,
+      },
     });
+
+    anchor = anchor!;
+    cardElement = anchor.parentElement!.parentElement!;
   });
 </script>
 
-<main on:mousedown={() => dispatchEvent(anchorDownEvent)}>
+<main bind:this={anchor} on:mousedown={() => dispatchEvent(anchorDownEvent)}>
   <div class="w-5 h-5 bg-white rounded-full border-4 border-green-500" />
 </main>

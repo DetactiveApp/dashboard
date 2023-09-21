@@ -3,6 +3,7 @@ export type NodeType = "START" | "STEP" | "DECISION";
 export interface Card {
     type: NodeType,
     data: any,
+    offset: [number, number],
     anchors: Anchor[],
     deleted: boolean,
 }
