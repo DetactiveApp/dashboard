@@ -12,7 +12,7 @@ export interface Anchor {
     id: string,
     type: "INPUT" | "OUTPUT"
     offset: [number, number],
-    connection: number | null,
+    connection: string | null,
 }
 
 export interface BoardState {

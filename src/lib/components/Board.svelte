@@ -1,9 +1,10 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import ConnectionContext from "./ConnectionContext.svelte";
 
   let board: HTMLElement;
 
-  let isDragging = false;
+  let isDragging: boolean = false;
   let initialMouseX: number;
   let initialMouseY: number;
   let initialCameraX: number;
@@ -39,11 +40,6 @@
     addEventListener("mouseup", (e) => {
       isDragging = false;
     });
-
-    // Anchor Events
-    addEventListener("anchordown", (e) => {
-      console.log((e as CustomEvent).detail);
-    });
   });
 </script>
 
@@ -52,6 +48,7 @@
     <div
       style={`transform: translate(${boardPosition[0]}px, ${boardPosition[1]}px);`}
     >
+      <ConnectionContext />
       <slot />
     </div>
   </section>
