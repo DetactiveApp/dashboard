@@ -44,11 +44,11 @@
 </script>
 
 <main>
+  <ConnectionContext />
   <section bind:this={board}>
     <div
       style={`transform: translate(${boardPosition[0]}px, ${boardPosition[1]}px);`}
     >
-      <ConnectionContext />
       <slot />
     </div>
   </section>

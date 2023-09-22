@@ -2,6 +2,9 @@
   import { onMount } from "svelte";
   import BoardStore from "$lib/stores/BoardStore";
 
+  $: innerWidth = 0;
+  $: innerHeight = 0;
+
   let isDragging: boolean = false;
   let connections: {
     from: { cardId: number; anchorId: number; anchorOffset: [number, number] };
@@ -37,12 +40,25 @@
 
     addEventListener("anchorup", (e) => {
       isDragging = false;
+      console.log(connections);
     });
   });
 </script>
 
-<main class="w-full h-full">
+<svelte:window bind:innerWidth bind:innerHeight />
+
+<svg
+  class="absolute pointer-events-none"
+  width={innerWidth}
+  height={innerHeight}
+>
   {#each connections as connection}
-    <svg />
+    <line
+      x1={connection.from.anchorOffset[0]}
+      y1={connection.from.anchorOffset[1]}
+      x2={1000}
+      y2={1090}
+      style="stroke:rgb(255,0,0);stroke-width:5"
+    />
   {/each}
-</main>
+</svg>
