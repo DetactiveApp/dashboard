@@ -13,18 +13,19 @@
   let anchorUpEvent: CustomEvent = new CustomEvent("anchorup", {});
 
   onMount(() => {
+    const rect = anchor.getBoundingClientRect();
     id = $BoardStore.cards[card].anchors.length;
     $BoardStore.cards[card].anchors[id] = {
       id: `${card},${id}`,
       type: type,
-      offset: [0, 0],
+      offset: [rect.left, rect.top],
       connection: null,
     };
 
     anchorDownEvent = new CustomEvent("anchordown", {
       detail: {
         id: `${card},${id}`,
-        offset: [0, 0],
+        offset: $BoardStore.cards[card].anchors[id].offset,
       },
     });
 
@@ -38,7 +39,7 @@
     anchorUpEvent = new CustomEvent("anchorup", {
       detail: {
         id: `${card},${id}`,
-        offset: [0, 0],
+        offset: $BoardStore.cards[card].anchors[id].offset,
       },
     });
 
@@ -46,6 +47,9 @@
       if (e.buttons === 1) {
         const rect = anchor.getBoundingClientRect();
         $BoardStore.cards[card].anchors[id].offset = [rect.left, rect.top];
+        anchorMoveEvent.detail.clientX = e.clientX;
+        anchorMoveEvent.detail.clientY = e.clientY;
+        dispatchEvent(anchorMoveEvent);
       }
     }
 
