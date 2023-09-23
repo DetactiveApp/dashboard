@@ -45,6 +45,21 @@
       $BoardStore.cards[card].anchors[id].connection = "ON_CONNECT";
     }
   }}
+  on:mouseup={(e) => {
+    if (e.buttons === 0) {
+      const connectionCardId = $BoardStore.cards.findIndex((card) =>
+        card.anchors.find((anchor) => anchor.connection === "ON_CONNECT")
+      );
+      const connectionAnchorId = $BoardStore.cards[
+        connectionCardId
+      ].anchors.findIndex((anchor) => anchor.connection === "ON_CONNECT");
+
+      $BoardStore.cards[card].anchors[id].connection = [
+        connectionCardId,
+        connectionAnchorId,
+      ];
+    }
+  }}
 >
   <div class="w-5 h-5 bg-white rounded-full border-4 border-green-500" />
 </main>
