@@ -24,9 +24,10 @@
       connection: null,
     };
 
-    addEventListener("mousemove", (e) => {
+    const mousemove = (e: MouseEvent) => {
       $BoardStore.cards[cardId].anchors[anchorId].offset = rectCenter();
-    });
+    };
+    addEventListener("mousemove", mousemove);
 
     addEventListener("mouseup", (e) => {
       if (
@@ -35,6 +36,34 @@
         $BoardStore.cards[cardId].anchors[anchorId].connection = null;
       }
     });
+
+    return () => {
+      removeEventListener("mousemove", mousemove);
+
+      const connectionCardId = $BoardStore.cards.findIndex((card) =>
+        card.anchors.find(
+          (anchor) =>
+            anchor.connection &&
+            anchor.connection[0] === cardId &&
+            anchor.connection[1] === anchorId
+        )
+      );
+
+      if (connectionCardId !== -1) {
+        const connectionAnchorId = $BoardStore.cards[
+          connectionCardId
+        ].anchors.findIndex(
+          (anchor) =>
+            anchor.connection &&
+            anchor.connection[0] === cardId &&
+            anchor.connection[1] === anchorId
+        );
+
+        $BoardStore.cards[connectionCardId].anchors[
+          connectionAnchorId
+        ].connection = null;
+      }
+    };
   });
 </script>
 
@@ -72,7 +101,31 @@
   }}
   on:mouseup={(e) => {
     if (e.buttons === 0) {
-      const connectionCardId = $BoardStore.cards.findIndex((card) =>
+      let connectionCardId = $BoardStore.cards.findIndex((card) =>
+        card.anchors.find(
+          (anchor) =>
+            anchor.connection &&
+            anchor.connection[0] === cardId &&
+            anchor.connection[1] === anchorId
+        )
+      );
+
+      if (connectionCardId !== -1) {
+        const connectionAnchorId = $BoardStore.cards[
+          connectionCardId
+        ].anchors.findIndex(
+          (anchor) =>
+            anchor.connection &&
+            anchor.connection[0] === cardId &&
+            anchor.connection[1] === anchorId
+        );
+
+        $BoardStore.cards[connectionCardId].anchors[
+          connectionAnchorId
+        ].connection = null;
+      }
+
+      connectionCardId = $BoardStore.cards.findIndex((card) =>
         card.anchors.find((anchor) => anchor.connection === "ON_CONNECT")
       );
       const connectionAnchorId = $BoardStore.cards[
