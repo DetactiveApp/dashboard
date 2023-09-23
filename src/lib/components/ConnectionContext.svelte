@@ -23,8 +23,17 @@
   <svg width={innerWidth} height={innerHeight}>
     {#each $BoardStore.cards as card, cardId}
       {#each $BoardStore.cards[cardId].anchors as anchor, anchorId}
-        {#if !$BoardStore.cards[cardId].deleted && $BoardStore.cards[cardId].anchors[anchorId].connection && anchor.connection}
-          {#if !Number.isNaN(anchor.connection[1])}
+        {#if !$BoardStore.cards[cardId].deleted && anchor.connection}
+          {#if anchor.connection === "ON_CONNECT"}
+            <line
+              x1={$BoardStore.cards[cardId].anchors[anchorId].offset[0]}
+              y1={$BoardStore.cards[cardId].anchors[anchorId].offset[1]}
+              x2={clientX}
+              y2={clientY}
+              class="stroke-green-500"
+              style="stroke-width: 8;"
+            />
+          {:else}
             <line
               x1={$BoardStore.cards[cardId].anchors[anchorId].offset[0]}
               y1={$BoardStore.cards[cardId].anchors[anchorId].offset[1]}
@@ -34,15 +43,6 @@
               y2={$BoardStore.cards[anchor.connection[0]].anchors[
                 anchor.connection[1]
               ].offset[1]}
-              class="stroke-green-500"
-              style="stroke-width: 8;"
-            />
-          {:else}
-            <line
-              x1={$BoardStore.cards[cardId].anchors[anchorId].offset[0]}
-              y1={$BoardStore.cards[cardId].anchors[anchorId].offset[1]}
-              x2={clientX}
-              y2={clientY}
               class="stroke-green-500"
               style="stroke-width: 8;"
             />

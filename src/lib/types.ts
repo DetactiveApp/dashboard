@@ -12,9 +12,10 @@ export interface Anchor {
     id: string,
     type: "INPUT" | "OUTPUT"
     offset: [number, number],
-    connection: [number, number] | null,
+    connection: [number, number] | null | "ON_CONNECT",
 }
 
 export interface BoardState {
     cards: Card[]
+
 }
