@@ -1,111 +1,17 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import BoardStore from "$lib/stores/BoardStore";
+  import { onMount } from "svelte";
 
   $: innerWidth = 0;
   $: innerHeight = 0;
 
-  let isDragging: boolean = false;
-  let connections: {
-    from: { cardId: number; anchorId: number; anchorOffset: [number, number] };
-    to: {
-      cardId: number;
-      anchorId: number;
-      anchorOffset: [number, number];
-    };
-  }[] = [];
+  let clientX: number = 0;
+  let clientY: number = 0;
 
   onMount(() => {
-    // Anchor Events
-    addEventListener("anchordown", (e) => {
-      isDragging = true;
-
-      const detail = (e as CustomEvent).detail;
-      const cardId = +detail.id.substring(0, detail.id.indexOf(","));
-      const anchorId = +detail.id.substring(detail.id.indexOf(",") + 1);
-
-      connections.push({
-        from: {
-          cardId: cardId,
-          anchorId: anchorId,
-          anchorOffset: $BoardStore.cards[cardId].anchors[anchorId].offset,
-        },
-        to: {
-          cardId: -1,
-          anchorId: -1,
-          anchorOffset: [0, 0],
-        },
-      });
-    });
-
-    addEventListener("anchormove", (e) => {
-      const index = connections.findIndex(
-        (connection) =>
-          connection.to === null ||
-          (connection.to?.cardId === -1 && connection.to?.anchorId === -1)
-      );
-
-      if (index !== -1) {
-        const detail = (e as CustomEvent).detail;
-        const cardId = -1;
-        const anchorId = -1;
-
-        connections[index].to = {
-          cardId: cardId,
-          anchorId: anchorId,
-          anchorOffset: [detail.clientX, detail.clientY],
-        };
-      }
-    });
-
-    addEventListener("anchorup", (e) => {
-      isDragging = false;
-      const index = connections.findIndex(
-        (connection) =>
-          connection.to.cardId === -1 && connection.to.anchorId === -1
-      );
-
-      if (index !== -1) {
-        const detail = (e as CustomEvent).detail;
-        const cardId = +detail.id.substring(0, detail.id.indexOf(","));
-        const anchorId = +detail.id.substring(detail.id.indexOf(",") + 1);
-
-        connections[index].to = {
-          cardId: cardId,
-          anchorId: anchorId,
-          anchorOffset: $BoardStore.cards[cardId].anchors[anchorId].offset,
-        };
-      }
-    });
-
     addEventListener("mousemove", (e) => {
-      if (e.buttons === 2) {
-        for (let connection of connections) {
-          $BoardStore.cards[connection.from.cardId].offset = [
-            e.clientX,
-            e.clientY,
-          ];
-          $BoardStore.cards[connection.to.cardId].offset = [
-            e.clientX,
-            e.clientY,
-          ];
-        }
-      }
-    });
-
-    addEventListener("mouseup", (e) => {
-      if (isDragging) {
-        const index = connections.findIndex(
-          (connection) =>
-            connection.to.cardId === -1 && connection.to.anchorId === -1
-        );
-
-        if (index !== -1) {
-          connections.splice(index, 1);
-        }
-
-        isDragging = false;
-      }
+      clientX = e.clientX;
+      clientY = e.clientY;
     });
   });
 </script>
@@ -113,18 +19,36 @@
 <svelte:window bind:innerWidth bind:innerHeight />
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<main class="absolute pointer-events-none z-50">
+<main class="absolute pointer-events-none z-10">
   <svg width={innerWidth} height={innerHeight}>
-    {#each connections as connection}
-      {#if !$BoardStore.cards[connection.from.cardId].deleted && $BoardStore.cards[connection.from.cardId].anchors[connection.from.anchorId]}
-        <line
-          x1={connection.from.anchorOffset[0]}
-          y1={connection.from.anchorOffset[1]}
-          x2={connection.to.anchorOffset[0]}
-          y2={connection.to.anchorOffset[1]}
-          style="stroke:rgb(255,0,0);stroke-width:5"
-        />
-      {/if}
+    {#each $BoardStore.cards as card, cardId}
+      {#each $BoardStore.cards[cardId].anchors as anchor, anchorId}
+        {#if !$BoardStore.cards[cardId].deleted && $BoardStore.cards[cardId].anchors[anchorId].connection && anchor.connection}
+          {#if !Number.isNaN(anchor.connection[1])}
+            <line
+              x1={$BoardStore.cards[cardId].anchors[anchorId].offset[0]}
+              y1={$BoardStore.cards[cardId].anchors[anchorId].offset[1]}
+              x2={$BoardStore.cards[anchor.connection[0]].anchors[
+                anchor.connection[1]
+              ].offset[0]}
+              y2={$BoardStore.cards[anchor.connection[0]].anchors[
+                anchor.connection[1]
+              ].offset[1]}
+              class="stroke-green-500"
+              style="stroke-width: 8;"
+            />
+          {:else}
+            <line
+              x1={$BoardStore.cards[cardId].anchors[anchorId].offset[0]}
+              y1={$BoardStore.cards[cardId].anchors[anchorId].offset[1]}
+              x2={clientX}
+              y2={clientY}
+              class="stroke-green-500"
+              style="stroke-width: 8;"
+            />
+          {/if}
+        {/if}
+      {/each}
     {/each}
   </svg>
 </main>
