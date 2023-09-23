@@ -13,7 +13,7 @@
       <p>{i + 1}. Decision:</p>
       <div class="flex justify-cemter items-center w-full -z-50">
         <input bind:value={title} placeholder="Title" type="text" />
-        <Anchor type="OUTPUT" card={index} />
+        <Anchor type="OUTPUT" cardId={index} />
       </div>
     {/each}
     <div>
@@ -35,7 +35,7 @@
       {/if}
     </div>
     <div class="absolute w-full h-full flex justify-start items-center -z-50">
-      <Anchor type="INPUT" card={index} />
+      <Anchor type="INPUT" cardId={index} />
     </div>
   </BaseCard>
 </main>

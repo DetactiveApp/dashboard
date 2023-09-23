@@ -58,8 +58,8 @@
       </select>
     </div>
     <div class="absolute w-full h-full flex justify-between items-center -z-50">
-      <Anchor type="INPUT" card={index} />
-      <Anchor type="OUTPUT" card={index} />
+      <Anchor type="INPUT" cardId={index} />
+      <Anchor type="OUTPUT" cardId={index} />
     </div>
   </BaseCard>
 </main>

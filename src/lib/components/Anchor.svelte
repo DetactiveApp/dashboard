@@ -1,11 +1,11 @@
 <script lang="ts">
   export let type: "INPUT" | "OUTPUT";
-  export let card: number;
+  export let cardId: number;
 
   import BoardStore from "$lib/stores/BoardStore";
   import { onMount } from "svelte";
 
-  let id: number = 0;
+  let anchorId: number = 0;
   let anchor: HTMLElement;
 
   const rectCenter = (): [number, number] => {
@@ -14,23 +14,23 @@
   };
 
   onMount(() => {
-    id = $BoardStore.cards[card].anchors.length;
-    $BoardStore.cards[card].anchors[id] = {
-      id: `${card},${id}`,
+    anchorId = $BoardStore.cards[cardId].anchors.length;
+    $BoardStore.cards[cardId].anchors[anchorId] = {
+      id: `${cardId},${anchorId}`,
       type: type,
       offset: rectCenter(),
       connection: null,
     };
 
     addEventListener("mousemove", (e) => {
-      if (e.buttons === 2) {
-        $BoardStore.cards[card].anchors[id].offset = rectCenter();
-      }
+      $BoardStore.cards[cardId].anchors[anchorId].offset = rectCenter();
     });
 
     addEventListener("mouseup", (e) => {
-      if ($BoardStore.cards[card].anchors[id].connection === "ON_CONNECT") {
-        $BoardStore.cards[card].anchors[id].connection = null;
+      if (
+        $BoardStore.cards[cardId].anchors[anchorId].connection === "ON_CONNECT"
+      ) {
+        $BoardStore.cards[cardId].anchors[anchorId].connection = null;
       }
     });
   });
@@ -41,8 +41,31 @@
   bind:this={anchor}
   on:mousedown={(e) => {
     if (e.buttons === 1) {
-      $BoardStore.cards[card].anchors[id].offset = [e.clientX, e.clientY];
-      $BoardStore.cards[card].anchors[id].connection = "ON_CONNECT";
+      const connectionCardId = $BoardStore.cards.findIndex((card) =>
+        card.anchors.find(
+          (anchor) =>
+            anchor.connection &&
+            anchor.connection[0] === cardId &&
+            anchor.connection[1] === anchorId
+        )
+      );
+
+      if (connectionCardId !== -1) {
+        const connectionAnchorId = $BoardStore.cards[
+          connectionCardId
+        ].anchors.findIndex(
+          (anchor) =>
+            anchor.connection &&
+            anchor.connection[0] === cardId &&
+            anchor.connection[1] === anchorId
+        );
+
+        $BoardStore.cards[connectionCardId].anchors[
+          connectionAnchorId
+        ].connection = null;
+      }
+
+      $BoardStore.cards[cardId].anchors[anchorId].connection = "ON_CONNECT";
     }
   }}
   on:mouseup={(e) => {
@@ -54,7 +77,11 @@
         connectionCardId
       ].anchors.findIndex((anchor) => anchor.connection === "ON_CONNECT");
 
-      $BoardStore.cards[card].anchors[id].connection = [
+      if (cardId === connectionCardId) {
+        return;
+      }
+
+      $BoardStore.cards[cardId].anchors[anchorId].connection = [
         connectionCardId,
         connectionAnchorId,
       ];
