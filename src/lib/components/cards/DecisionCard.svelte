@@ -9,6 +9,9 @@
 
 <main>
   <BaseCard title="Decision" id={index}>
+    <div class="absolute w-full h-full flex justify-start items-center -z-50">
+      <Anchor type="INPUT" cardId={index} />
+    </div>
     {#each $BoardStore.cards[index].data.titles as title, i}
       <p>{i + 1}. Decision:</p>
       <div class="flex justify-cemter items-center w-full -z-50">
@@ -35,9 +38,6 @@
           }}>-</button
         >
       {/if}
-    </div>
-    <div class="absolute w-full h-full flex justify-start items-center -z-50">
-      <Anchor type="INPUT" cardId={index} />
     </div>
   </BaseCard>
 </main>
