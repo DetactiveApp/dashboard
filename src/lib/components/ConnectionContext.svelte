@@ -25,6 +25,13 @@
       {#each $BoardStore.cards[cardId].anchors as anchor, anchorId}
         {#if !$BoardStore.cards[cardId].deleted && anchor.connection}
           {#if anchor.connection === "ON_CONNECT"}
+            <circle
+              cx={$BoardStore.cards[cardId].anchors[anchorId].offset[0]}
+              cy={$BoardStore.cards[cardId].anchors[anchorId].offset[1]}
+              r={4}
+              class="fill-green-500"
+            />
+            <circle cx={clientX} cy={clientY} r={4} class="fill-green-500" />
             <line
               x1={$BoardStore.cards[cardId].anchors[anchorId].offset[0]}
               y1={$BoardStore.cards[cardId].anchors[anchorId].offset[1]}
@@ -34,6 +41,22 @@
               style="stroke-width: 8;"
             />
           {:else}
+            <circle
+              cx={$BoardStore.cards[cardId].anchors[anchorId].offset[0]}
+              cy={$BoardStore.cards[cardId].anchors[anchorId].offset[1]}
+              r={4}
+              class="fill-green-500"
+            />
+            <circle
+              cx={$BoardStore.cards[anchor.connection[0]].anchors[
+                anchor.connection[1]
+              ].offset[0]}
+              cy={$BoardStore.cards[anchor.connection[0]].anchors[
+                anchor.connection[1]
+              ].offset[1]}
+              r={4}
+              class="fill-green-500"
+            />
             <line
               x1={$BoardStore.cards[cardId].anchors[anchorId].offset[0]}
               y1={$BoardStore.cards[cardId].anchors[anchorId].offset[1]}

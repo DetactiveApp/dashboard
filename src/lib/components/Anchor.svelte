@@ -10,7 +10,9 @@
 
   const rectCenter = (): [number, number] => {
     const rect = anchor.getBoundingClientRect();
-    return [rect.left, rect.top];
+    const centerX = (rect.left + rect.right) * 0.5;
+    const centerY = (rect.top + rect.bottom) * 0.5;
+    return [centerX, centerY];
   };
 
   onMount(() => {
