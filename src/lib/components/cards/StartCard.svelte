@@ -8,7 +8,7 @@
 </script>
 
 <main>
-  <BaseCard title="Start" id={0}>
+  <BaseCard title="Start" cardId={0}>
     <div>
       <p>Story Title:</p>
       <input
@@ -22,6 +22,7 @@
       <textarea
         placeholder="Description"
         bind:value={$BoardStore.cards[index].data.description}
+        on:mousedown={(e) => e.stopImmediatePropagation()}
       />
     </div>
     <div>

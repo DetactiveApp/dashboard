@@ -1,9 +1,10 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import ContextMenu from "./ContextMenu.svelte";
   import ConnectionContext from "./ConnectionContext.svelte";
+  import ContextMenu from "./ContextMenu.svelte";
 
   let board: HTMLElement;
+  let onContextMenu: boolean = false;
 
   let isDragging: boolean = false;
   let initialMouseX: number;
@@ -12,11 +13,15 @@
   let initialCameraY: number;
   let boardPosition: [number, number] = [0, 0];
 
+  let ctxMouseX: number;
+  let ctxMouseY: number;
+
   onMount(() => {
     addEventListener("mousedown", (e) => {
-      if (e.buttons === 2) {
+      if (e.buttons === 1) {
         if (e.target === board) {
           isDragging = true;
+          onContextMenu = false;
           initialMouseX = e.clientX;
           initialMouseY = e.clientY;
           initialCameraX = boardPosition[0];
@@ -40,15 +45,24 @@
 
     addEventListener("mouseup", (e) => {
       isDragging = false;
+      onContextMenu = false;
     });
   });
 </script>
 
-<main>
-  <ContextMenu />
+<main
+  on:contextmenu={(e) => {
+    onContextMenu = true;
+    ctxMouseX = e.clientX;
+    ctxMouseY = e.clientY;
+  }}
+>
   <ConnectionContext />
 
   <section bind:this={board}>
+    {#if onContextMenu}
+      <ContextMenu clientX={ctxMouseX} clientY={ctxMouseY} />
+    {/if}
     <div
       style={`transform: translate(${boardPosition[0]}px, ${boardPosition[1]}px);`}
     >

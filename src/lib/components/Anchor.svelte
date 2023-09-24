@@ -4,6 +4,7 @@
 
   import BoardStore from "$lib/stores/BoardStore";
   import { onMount } from "svelte";
+  import { prevent_default, stop_immediate_propagation } from "svelte/internal";
 
   let anchorId: number = 0;
   let anchor: HTMLElement;
@@ -71,6 +72,7 @@
 <main
   bind:this={anchor}
   on:mousedown={(e) => {
+    e.stopImmediatePropagation();
     if (e.buttons === 1) {
       const connectionCardId = $BoardStore.cards.findIndex((card) =>
         card.anchors.find(

@@ -8,7 +8,7 @@
 </script>
 
 <main>
-  <BaseCard title="Decision" id={index}>
+  <BaseCard title="Decision" cardId={index}>
     <div class="absolute w-full h-full flex justify-start items-center -z-50">
       <Anchor type="INPUT" cardId={index} />
     </div>
