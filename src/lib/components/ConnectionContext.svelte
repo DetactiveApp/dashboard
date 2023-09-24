@@ -19,7 +19,7 @@
 <svelte:window bind:innerWidth bind:innerHeight />
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<main class="absolute pointer-events-none z-10">
+<main class="absolute pointer-events-none z-50">
   <svg width={innerWidth} height={innerHeight}>
     {#each $BoardStore.cards as card, cardId}
       {#each $BoardStore.cards[cardId].anchors as anchor, anchorId}

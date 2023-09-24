@@ -48,8 +48,8 @@
     {#each cardTitles as cardTitle}
       <div class="hover:bg-neutral-300 w-full">
         <button
-          on:mouseup={() => {
-            createCard(cardTitle);
+          on:mousedown={(e) => {
+            if (e.buttons === 1) createCard(cardTitle);
           }}
         >
           {titleCase(cardTitle)}

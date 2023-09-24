@@ -1,6 +1,7 @@
 <script lang="ts">
   import Logo from "$lib/assets/branding/Detactive-Logo.svg";
   import BoardStore from "$lib/stores/BoardStore";
+  import { each } from "svelte/internal";
 
   function debugClick() {
     console.log("Board: ", $BoardStore);
@@ -12,4 +13,9 @@
 >
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <img on:click={debugClick} class="w-7 h-7" src={Logo} alt="Detactive Logo" />
+  <select>
+    <option>
+      {#each [] as story}{/each}
+    </option>
+  </select>
 </nav>

@@ -43,7 +43,7 @@
       }
     });
 
-    addEventListener("mouseup", (e) => {
+    addEventListener("mouseup", () => {
       isDragging = false;
       onContextMenu = false;
     });
@@ -58,7 +58,6 @@
   }}
 >
   <ConnectionContext />
-
   <section bind:this={board}>
     {#if onContextMenu}
       <ContextMenu
@@ -85,5 +84,6 @@
     background-color: #3b3b3b;
     background-image: url("$lib/assets/board/plus.svg");
     background-size: 4rem;
+    overflow: hidden;
   }
 </style>
