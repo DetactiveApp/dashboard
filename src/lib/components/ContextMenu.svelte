@@ -7,6 +7,8 @@
 
   export let clientX: number;
   export let clientY: number;
+  export let boardX: number;
+  export let boardY: number;
 
   let menu: HTMLElement;
   let cardTitles: string[] = Object.keys(cardMappings).splice(1);
@@ -33,7 +35,7 @@
 
     const newCard: Card = {
       ...JSON.parse(JSON.stringify(initCard)),
-      offset: [clientX, clientY],
+      offset: [clientX - boardX, clientY - boardY],
     };
     $BoardStore.cards.push(newCard);
   };

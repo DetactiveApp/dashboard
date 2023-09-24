@@ -61,7 +61,12 @@
 
   <section bind:this={board}>
     {#if onContextMenu}
-      <ContextMenu clientX={ctxMouseX} clientY={ctxMouseY} />
+      <ContextMenu
+        clientX={ctxMouseX}
+        clientY={ctxMouseY}
+        boardX={boardPosition[0]}
+        boardY={boardPosition[1]}
+      />
     {/if}
     <div
       style={`transform: translate(${boardPosition[0]}px, ${boardPosition[1]}px);`}
