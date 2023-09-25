@@ -4,7 +4,7 @@
   import BoardStore from "$lib/stores/BoardStore";
 
   import BaseCard from "./BaseCard.svelte";
-  import PoiData from "$lib/assets/pois.json";
+  import PoiData from "$lib/assets/data/pois.json";
   import Anchor from "../Anchor.svelte";
 </script>
 
