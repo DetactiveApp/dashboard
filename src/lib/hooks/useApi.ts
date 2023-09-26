@@ -1,7 +1,7 @@
-const apiUrl = "test-api.detactive.de"
+const apiUrl = "https://test-api.detactive.de/v1"
 
-const useApi = (path: string, requestInit?: RequestInit) => {
-    return fetch(apiUrl + path, requestInit)
+const useApi = async (path: string, requestInit?: RequestInit) => {
+    return await fetch(apiUrl + path, requestInit)
 }
 
 export default useApi;
