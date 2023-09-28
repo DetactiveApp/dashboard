@@ -3,7 +3,7 @@
   import { cardMappings } from "$lib/utils/cardMappings";
   import BoardStore from "$lib/stores/BoardStore";
   import { initDecisionCard, initStepCard } from "$lib/utils/initCards";
-  import type { Card, NodeType } from "$lib/types";
+  import type { Card } from "$lib/types";
 
   export let clientX: number;
   export let clientY: number;
@@ -48,6 +48,7 @@
     {#each cardTitles as cardTitle}
       <div class="hover:bg-neutral-300 w-full">
         <button
+          class="w-full h-full text-left"
           on:mousedown={(e) => {
             if (e.buttons === 1) createCard(cardTitle);
           }}
