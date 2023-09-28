@@ -33,6 +33,7 @@
         bind:value={$BoardStore.cards[index].data.mediaType}
       >
         <option value="NONE">NONE</option>
+        <option value="IMAGE">IMAGE</option>
         <option value="AUDIO">AUDIO</option>
         <option value="VIDEO">VIDEO</option>
       </select>

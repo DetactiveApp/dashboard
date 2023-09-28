@@ -45,12 +45,28 @@
       await useApi(`/storystudio/load/${storyUuid}`)
     ).json();
 
+    console.log(streamedStory);
+
     // Load Story
     $BoardStore.cards[0].data.title = streamedStory.story.title;
     $BoardStore.cards[0].data.description = streamedStory.story.description;
     $BoardStore.cards[0].data.active = streamedStory.story.active;
 
     // Load Cards
+    for (const step of streamedStory.steps) {
+      $BoardStore.cards.push({
+        type: "STEP",
+        data: {
+          title: step.title,
+          description: step.description,
+          mediaType: step.mediaType ? step.mediaType : "NONE",
+          asset_id: step.asset_id,
+        },
+        offset: [0, 0],
+        anchors: [],
+        deleted: false,
+      });
+    }
   };
 </script>
 
