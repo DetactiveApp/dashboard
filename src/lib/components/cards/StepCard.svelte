@@ -51,12 +51,19 @@
       <p>Waypoint:</p>
       <select
         name="Waypoints"
-        bind:value={$BoardStore.cards[index].data.placeType}
+        bind:value={$BoardStore.cards[index].data.waypoint.placeType}
       >
         {#each PoiData.pois as poi}
           <option value={poi}>{poi}</option>
         {/each}
       </select>
+      {#if $BoardStore.cards[index].data.waypoint.placeType !== "none" && $BoardStore.cards[index].data.waypoint.placeType !== "random"}
+        <p>Random override:</p>
+        <input
+          type="checkbox"
+          bind:checked={$BoardStore.cards[index].data.waypoint.placeOverride}
+        />
+      {/if}
     </div>
     <div class="absolute w-full h-full flex justify-between items-center -z-50">
       <Anchor type="INPUT" cardId={index} />

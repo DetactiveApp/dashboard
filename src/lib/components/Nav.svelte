@@ -60,7 +60,11 @@
           title: step.title,
           description: step.description,
           mediaType: step.mediaType ? step.mediaType : "NONE",
-          asset_id: step.asset_id,
+          assetId: step.assetId,
+          waypoint: {
+            placeType: step.waypoint ? step.waypoint.placeType : "none",
+            placeOverride: step.waypoint ? step.waypoint.placeOverride : false,
+          },
         },
         offset: [0, 0],
         anchors: [],
