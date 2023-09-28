@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import Logo from "$lib/assets/branding/Detactive-Logo.svg";
-  import BoardStore from "$lib/stores/BoardStore";
+  import BoardStore, { initBoardState } from "$lib/stores/BoardStore";
   import useApi from "$lib/hooks/useApi";
   import { initStartCard } from "$lib/utils/initCards";
 
@@ -26,13 +26,32 @@
   });
 
   const reset = () => {
+    // Soft delete
     for (let card of $BoardStore.cards) {
+      if (card.type === "START") continue;
       card.deleted = true;
     }
-    $BoardStore.cards.push(JSON.parse(JSON.stringify(initStartCard)));
+
+    $BoardStore.cards[0].data = JSON.parse(JSON.stringify(initStartCard)).data;
+    $BoardStore.cards[0].anchors.forEach(
+      (anchor) => (anchor.connection = null)
+    );
   };
 
-  const load = (storyUuid: string) => {};
+  const load = async (storyUuid: string) => {
+    reset();
+
+    let streamedStory = await (
+      await useApi(`/storystudio/load/${storyUuid}`)
+    ).json();
+
+    // Load Story
+    $BoardStore.cards[0].data.title = streamedStory.story.title;
+    $BoardStore.cards[0].data.description = streamedStory.story.description;
+    $BoardStore.cards[0].data.active = streamedStory.story.active;
+
+    // Load Cards
+  };
 </script>
 
 <nav

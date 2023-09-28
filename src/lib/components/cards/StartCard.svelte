@@ -29,7 +29,7 @@
       <p>Active:</p>
       <input
         type="checkbox"
-        bind:value={$BoardStore.cards[index].data.active}
+        bind:checked={$BoardStore.cards[index].data.active}
       />
     </div>
     <div class="absolute w-full h-full flex justify-end items-center -z-50">
