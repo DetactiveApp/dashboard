@@ -28,6 +28,7 @@
   });
 </script>
 
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <main
   bind:this={card}
   on:mousedown={(e) => {
@@ -49,6 +50,7 @@
   <header class="h-fit w-full flex justify-center">
     <h1 class="text-lg">{title}</h1>
   </header>
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
     on:mousedown={(e) => e.stopImmediatePropagation()}
     on:contextmenu={(e) => {

@@ -4,7 +4,6 @@
 
   import BoardStore from "$lib/stores/BoardStore";
   import { onMount } from "svelte";
-  import { prevent_default, stop_immediate_propagation } from "svelte/internal";
 
   let anchorId: number = 0;
   let anchor: HTMLElement;
@@ -69,6 +68,7 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <main
   bind:this={anchor}
   on:mousedown={(e) => {

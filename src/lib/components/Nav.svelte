@@ -3,8 +3,7 @@
   import Logo from "$lib/assets/branding/Detactive-Logo.svg";
   import BoardStore from "$lib/stores/BoardStore";
   import useApi from "$lib/hooks/useApi";
-  import load from "$lib/data/load";
-  import reset from "$lib/data/reset";
+  import { initStartCard } from "$lib/utils/initCards";
 
   let storySelector: HTMLSelectElement;
   let stories: { title: string; uuid: string }[] = [
@@ -16,19 +15,31 @@
   };
 
   const updateStories = async () => {
-    let streamedStories = await (await useApi("/storystudio/list")).json();
+    let streamedStories: { title: string; uuid: string }[] = await (
+      await useApi("/storystudio/list")
+    ).json();
     stories = stories.concat(streamedStories);
   };
 
   onMount(async () => {
     await updateStories();
   });
+
+  const reset = () => {
+    for (let card of $BoardStore.cards) {
+      card.deleted = true;
+    }
+    $BoardStore.cards.push(JSON.parse(JSON.stringify(initStartCard)));
+  };
+
+  const load = (storyUuid: string) => {};
 </script>
 
 <nav
   class="flex text-xl text-center justify-start items-center h-fit w-screen bg-white mt-9 z-50 border-green-500 border-b-4"
 >
   <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <img on:click={debugClick} class="w-7 h-7" src={Logo} alt="Detactive Logo" />
   <select
     bind:this={storySelector}

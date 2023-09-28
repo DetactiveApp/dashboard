@@ -17,5 +17,4 @@ export interface Anchor {
 
 export interface BoardState {
     cards: Card[]
-
 }
