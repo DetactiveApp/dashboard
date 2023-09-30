@@ -5,6 +5,7 @@ export interface Card {
     data: any,
     offset: [number, number],
     anchors: Anchor[],
+    remote: string | null,
     deleted: boolean,
 }
 

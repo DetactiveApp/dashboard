@@ -38,40 +38,98 @@
     );
   };
 
+  // LOAD SELECETED STORY
   const load = async (storyUuid: string) => {
     reset();
 
-    let streamedStory = await (
-      await useApi(`/storystudio/load/${storyUuid}`)
-    ).json();
+    const cardGap = 400;
+    const initPosition = $BoardStore.cards[0].offset;
 
-    console.log(streamedStory);
+    const fillStore = async () => {
+      let streamedStory = await (
+        await useApi(`/storystudio/load/${storyUuid}`)
+      ).json();
 
-    // Load Story
-    $BoardStore.cards[0].data.title = streamedStory.story.title;
-    $BoardStore.cards[0].data.description = streamedStory.story.description;
-    $BoardStore.cards[0].data.active = streamedStory.story.active;
+      // Load Story
+      $BoardStore.cards[0].data.title = streamedStory.story.title;
+      $BoardStore.cards[0].data.description = streamedStory.story.description;
+      $BoardStore.cards[0].data.active = streamedStory.story.active;
+      $BoardStore.cards[0].remote = streamedStory.story.uuid;
 
-    // Load Cards
-    for (const step of streamedStory.steps) {
-      $BoardStore.cards.push({
-        type: "STEP",
-        data: {
-          title: step.title,
-          description: step.description,
-          mediaType: step.mediaType ? step.mediaType : "NONE",
-          assetId: step.assetId,
-          waypoint: {
-            placeType: step.waypoint ? step.waypoint.placeType : "none",
-            placeOverride: step.waypoint ? step.waypoint.placeOverride : false,
+      // Load Cards
+      for (const [index, step] of streamedStory.steps.entries()) {
+        $BoardStore.cards.push({
+          type: "STEP",
+          data: {
+            title: step.title,
+            description: step.description,
+            mediaType: step.mediaType ? step.mediaType : "NONE",
+            assetId: step.assetId,
+            waypoint: {
+              placeType: step.waypoint ? step.waypoint.placeType : "none",
+              placeOverride: step.waypoint
+                ? step.waypoint.placeOverride
+                : false,
+            },
           },
-        },
-        offset: [0, 0],
-        anchors: [],
-        deleted: false,
-      });
-    }
+          offset: [initPosition[0] + (index + 1) * cardGap, initPosition[1]],
+          anchors: [],
+          remote: step.uuid,
+          deleted: false,
+        });
+      }
+
+      return streamedStory;
+    };
+
+    const connectCards = async (streamedStory: any) => {
+      for (const step of streamedStory.steps) {
+        const cCardIndex = $BoardStore.cards.findIndex(
+          (card) => card.remote === step.uuid && card.deleted === false
+        );
+
+        const cCardOutputAnchorIndex = $BoardStore.cards[
+          cCardIndex
+        ].anchors.findIndex((anchor) => anchor.type === "OUTPUT");
+
+        for (const decision of step.decisions) {
+          const nCardIndex = $BoardStore.cards.findIndex(
+            (card) =>
+              card.remote === decision.stepOutputUuid && card.deleted === false
+          );
+
+          if (nCardIndex === -1) continue;
+
+          const nCardInputAchorIndex = $BoardStore.cards[
+            nCardIndex
+          ].anchors.findIndex((anchor) => anchor.type === "INPUT");
+
+          if (nCardInputAchorIndex === -1) continue;
+
+          $BoardStore.cards[cCardIndex].anchors[
+            cCardOutputAnchorIndex
+          ].connection = [nCardIndex, nCardInputAchorIndex];
+        }
+      }
+
+      const firstConnectionCard = $BoardStore.cards.findIndex(
+        (card) =>
+          card.anchors.findIndex(
+            (anchor) => anchor.type === "OUTPUT" && anchor.connection === null
+          ) && card.deleted === false
+      );
+
+      $BoardStore.cards[0].anchors[0].connection = [firstConnectionCard, 0];
+    };
+
+    // Load store and render cards in order
+    const streamedStory = await fillStore();
+    // Load Connections/Decisions
+    await connectCards(streamedStory);
   };
+
+  // SAVE SELECETED STORY
+  const save = async () => {};
 </script>
 
 <nav
@@ -88,7 +146,7 @@
         : load(storySelector.value)}
   >
     {#each stories as story}
-      <option value={story.uuid} title={story.uuid}>{story.title} </option>
+      <option value={story.uuid} title={story.uuid}>{story.title}</option>
     {/each}
   </select>
 </nav>
