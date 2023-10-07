@@ -17,5 +17,37 @@ export interface Anchor {
 }
 
 export interface BoardState {
-    cards: Card[]
+    cards: Card[],
+}
+
+// Streamed
+export interface StreamedStory {
+    uuid: string | null,
+    title: string,
+    description: string,
+    active: boolean,
+    assetId: string | null,
+}
+
+export interface StreamedWaypoint {
+    uuid: string | null,
+    placeType: string,
+    placeOverride: boolean,
+}
+
+export interface StreamedDecision {
+    uuid: string | null,
+    title: string | null,
+    stepInputUuid: string,
+    stepOutputUuid: string | null,
+}
+
+export interface StreamedStep {
+    uuid: string | null,
+    title: string,
+    description: string,
+    mediaType: string | null,
+    assetId: string | null,
+    waypoint: StreamedWaypoint | null,
+    decisions: StreamedDecision[],
 }
