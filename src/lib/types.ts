@@ -1,6 +1,7 @@
 export type NodeType = "START" | "STEP" | "DECISION";
 
 export interface Card {
+    active: boolean;
     type: NodeType,
     data: any,
     offset: [number, number],
@@ -10,7 +11,7 @@ export interface Card {
 }
 
 export interface Anchor {
-    id: string,
+    id: [number, number],
     type: "INPUT" | "OUTPUT"
     offset: [number, number],
     connection: [number, number] | null | "ON_CONNECT",

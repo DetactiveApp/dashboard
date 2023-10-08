@@ -18,7 +18,7 @@
   onMount(() => {
     anchorId = $BoardStore.cards[cardId].anchors.length;
     $BoardStore.cards[cardId].anchors[anchorId] = {
-      id: `${cardId},${anchorId}`,
+      id: [cardId, anchorId],
       type: type,
       offset: rectCenter(),
       connection: null,

@@ -3,9 +3,10 @@
   import Logo from "$lib/assets/branding/Detactive-Logo.svg";
   import BoardStore from "$lib/stores/BoardStore";
   import useApi from "$lib/hooks/useApi";
-  import { initStartCard } from "$lib/utils/initCards";
 
   import load from "$lib/data/load";
+  import reset from "$lib/data/reset";
+  import type { StreamedStep } from "$lib/types";
 
   let storySelector: HTMLSelectElement;
   let stories: { title: string; uuid: string }[] = [
@@ -26,10 +27,6 @@
   onMount(async () => {
     await updateStories();
   });
-
-  const reset = () => {
-    // Soft delete
-  };
 </script>
 
 <nav
@@ -40,10 +37,10 @@
   <img on:click={debugClick} class="w-7 h-7" src={Logo} alt="Detactive Logo" />
   <select
     bind:this={storySelector}
-    on:change={() =>
+    on:change={async () =>
       storySelector.value === stories[0].uuid
-        ? reset
-        : load(storySelector.value)}
+        ? reset()
+        : await load(storySelector.value)}
   >
     {#each stories as story}
       <option value={story.uuid} title={story.uuid}>{story.title}</option>

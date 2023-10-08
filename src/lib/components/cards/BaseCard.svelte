@@ -25,6 +25,11 @@
     addEventListener("mouseup", () => {
       isDragging = false;
     });
+    $BoardStore.cards[cardId].active = true;
+
+    return () => {
+      $BoardStore.cards[cardId].active = false;
+    };
   });
 </script>
 
