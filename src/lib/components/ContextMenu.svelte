@@ -50,7 +50,8 @@
         <button
           class="w-full h-full text-left"
           on:mousedown={(e) => {
-            if (e.buttons === 1) createCard(cardTitle);
+            // TODO DECISION CARDS (API CONNECTION)
+            if (e.buttons === 1 && cardTitle === "STEP") createCard(cardTitle);
           }}
         >
           {titleCase(cardTitle)}

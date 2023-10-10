@@ -6,12 +6,10 @@
 
   import load from "$lib/data/load";
   import reset from "$lib/data/reset";
-  import type { StreamedStep } from "$lib/types";
+  import save from "$lib/data/save";
 
   let storySelector: HTMLSelectElement;
-  let stories: { title: string; uuid: string }[] = [
-    { title: "NEW", uuid: "Creates a new story." },
-  ];
+  let stories: { title: string; uuid: string }[] = [];
 
   const debugClick = () => {
     console.log("Board: ", $BoardStore);
@@ -21,6 +19,7 @@
     let streamedStories: { title: string; uuid: string }[] = await (
       await useApi("/storystudio/list/stories")
     ).json();
+    stories = [{ title: "NEW", uuid: "Creates a new story." }];
     stories = stories.concat(streamedStories);
   };
 
@@ -37,13 +36,21 @@
   <img on:click={debugClick} class="w-7 h-7" src={Logo} alt="Detactive Logo" />
   <select
     bind:this={storySelector}
-    on:change={async () =>
+    on:change={async () => {
       storySelector.value === stories[0].uuid
-        ? reset()
-        : await load(storySelector.value)}
+        ? await reset()
+        : await load(storySelector.value);
+    }}
   >
     {#each stories as story}
       <option value={story.uuid} title={story.uuid}>{story.title}</option>
     {/each}
   </select>
+  <button
+    class="ml-1"
+    on:click={async () => {
+      await save();
+      await updateStories();
+    }}>SAVE</button
+  >
 </nav>

@@ -1,12 +1,13 @@
-export type NodeType = "START" | "STEP" | "DECISION";
+export type CardType = "START" | "STEP" | "DECISION";
 
 export interface Card {
     active: boolean;
-    type: NodeType,
+    type: CardType,
     data: any,
     offset: [number, number],
     anchors: Anchor[],
     remote: string | null,
+    storyRemote: string | null,
     deleted: boolean,
 }
 
@@ -45,6 +46,7 @@ export interface StreamedDecision {
 
 export interface StreamedStep {
     uuid: string | null,
+    storyUuid: string,
     title: string,
     description: string,
     mediaType: string | null,
