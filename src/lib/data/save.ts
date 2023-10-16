@@ -1,9 +1,11 @@
 import useApi from "$lib/hooks/useApi";
 import BoardStore from "$lib/stores/BoardStore";
 import type { StreamedDecision, StreamedStep, StreamedStory, StreamedWaypoint } from "$lib/types";
+import { tick } from "svelte";
 import { get } from "svelte/store";
 
 const save = async () => {
+
     // SAVE STORY
     let storyUuid: string | null;
     let board = get(BoardStore);
@@ -25,9 +27,11 @@ const save = async () => {
     })).json()
 
     board.cards[0].data = { title: story.title, description: story.description, active: story.active, assetId: story.assetId };
-    board.cards[0].remote = story.uuid;
+    board.cards[0].storyRemote = story.uuid;
+    board.cards[0].remote = null;
     storyUuid = story.uuid;
 
+    // SAVE CARDS
     for (let card of board.cards) {
         if (!card.active && card.deleted) continue;
         if (card.type === "STEP") {
@@ -52,26 +56,6 @@ const save = async () => {
                 body: JSON.stringify(step)
             })).json()
 
-            for (const anchor of card.anchors) {
-                if (anchor.type === "INPUT") continue;
-                const outputUuid = board.cards.find((card) => card.anchors.find((foreignAnchor) => foreignAnchor.id === anchor.connection && foreignAnchor.type === "INPUT"))?.remote;
-                const decision: StreamedDecision = {
-                    uuid: anchor.remote,
-                    title: "",
-                    stepInputUuid: step.uuid!,
-                    stepOutputUuid: outputUuid!,
-                }
-                step.decisions.push(decision);
-            }
-
-            step = await (await useApi("/storystudio/steps/save", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(step)
-            })).json()
-
             card.data = {
                 title: step.title,
                 description: step.description,
@@ -84,13 +68,31 @@ const save = async () => {
                 }
             };
             card.remote = step.uuid;
-        }
 
-        if (card.type === "DECISION") {
-            // TODO
+            await tick();
+
+            // SAVE ALL DECISIONS
+            for (const anchor of card.anchors) {
+                if (anchor.type === "OUTPUT" && anchor.connection && step.uuid && anchor.connection[0] !== 0) {
+                    const decision: StreamedDecision = {
+                        uuid: anchor.remote,
+                        title: card.data.title,
+                        stepInputUuid: step.uuid,
+                        stepOutputUuid: board.cards[anchor.connection[0] as number].remote ?? null,
+                    }
+                    step.decisions.push(decision);
+                }
+            }
+
+            await (await useApi("/storystudio/steps/save", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(step)
+            })).json()
         }
     }
-
     return storyUuid;
 }
 

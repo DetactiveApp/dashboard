@@ -37,11 +37,14 @@ const load = async (storyUuid: string) => {
             deleted: false
         };
 
+        console.log(step.decisions)
+
         for (const decision of step.decisions) {
             connections.push([decision.stepInputUuid, decision.stepOutputUuid!, decision.uuid!]);
         }
 
         board.cards.push(stepCard);
+        step.decisions = step.decisions.filter((decision) => decision.stepInputUuid && decision.stepOutputUuid);
 
         if (step.decisions.length > 1) {
             const decisionCard: Card = {
@@ -54,7 +57,7 @@ const load = async (storyUuid: string) => {
                 storyRemote: story.uuid,
                 deleted: false
             };
-            board.cards.push(decisionCard);
+            //board.cards.push(decisionCard);
         }
     }
     // Update data & get anchors
@@ -70,6 +73,9 @@ const load = async (storyUuid: string) => {
 
             board.cards[inputCardIndex].anchors[outputAnchorIndex].connection = [outputCardIndex, inputAnchorIndex]
             board.cards[inputCardIndex].anchors[outputAnchorIndex].remote = connection[2];
+
+            board.cards[outputCardIndex].anchors[inputAnchorIndex].connection = [inputCardIndex, outputAnchorIndex]
+            board.cards[outputCardIndex].anchors[inputAnchorIndex].remote = connection[2];
         }
     }
 
@@ -81,7 +87,10 @@ const load = async (storyUuid: string) => {
                 (anchor) => anchor.type === "OUTPUT" && anchor.connection === null
             ) && card.deleted === false
     );
-    first !== -1 ? board.cards[0].anchors[0].connection = [first, 0] : null
+    if (first !== -1) {
+        board.cards[0].anchors[0].connection = [first, 0];
+        board.cards[first].anchors.find((anchor) => anchor.type === "INPUT")!.connection = [0, 0];
+    }
 }
 
 export default load;

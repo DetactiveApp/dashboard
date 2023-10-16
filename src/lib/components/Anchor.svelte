@@ -131,6 +131,7 @@
       connectionCardId = $BoardStore.cards.findIndex((card) =>
         card.anchors.find((anchor) => anchor.connection === "ON_CONNECT")
       );
+
       const connectionAnchorId = $BoardStore.cards[
         connectionCardId
       ].anchors.findIndex(
@@ -139,8 +140,15 @@
 
       if (cardId === connectionCardId) {
         $BoardStore.cards[cardId].anchors[anchorId].connection = null;
+        $BoardStore.cards[connectionCardId].anchors[
+          connectionAnchorId
+        ].connection = null;
         return;
       }
+
+      $BoardStore.cards[connectionCardId].anchors[
+        connectionAnchorId
+      ].connection = [cardId, anchorId];
 
       $BoardStore.cards[cardId].anchors[anchorId].connection = [
         connectionCardId,
