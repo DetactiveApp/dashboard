@@ -10,13 +10,15 @@ const load = async (storyUuid: string) => {
     const stepsList: { title: string; uuid: string }[] = await (await useApi(`/storystudio/list/stories/${storyUuid}/steps`)).json();
     reset();
 
-    let connections: [string, string][] = [];
+    // INPUT UUID, OUTPUT UUID, DECISION UUID
+    let connections: [string, string, string][] = [];
     let board = get(BoardStore);
 
     // LOAD START CARD
     const story: StreamedStory = await (await useApi(`/storystudio/stories/${storyUuid}/load`)).json();
     board.cards[0].data = { title: story.title, description: story.description, active: story.active, assetId: story.assetId };
     board.cards[0].remote = story.uuid;
+    board.cards[0].storyRemote = story.uuid;
 
 
     // LOAD STEP CARDS
@@ -36,7 +38,7 @@ const load = async (storyUuid: string) => {
         };
 
         for (const decision of step.decisions) {
-            connections.push([decision.stepInputUuid, decision.stepOutputUuid!]);
+            connections.push([decision.stepInputUuid, decision.stepOutputUuid!, decision.uuid!]);
         }
 
         board.cards.push(stepCard);
@@ -67,6 +69,7 @@ const load = async (storyUuid: string) => {
             const inputAnchorIndex = board.cards[outputCardIndex].anchors.findIndex((anchor) => anchor.type === "INPUT");
 
             board.cards[inputCardIndex].anchors[outputAnchorIndex].connection = [outputCardIndex, inputAnchorIndex]
+            board.cards[inputCardIndex].anchors[outputAnchorIndex].remote = connection[2];
         }
     }
 

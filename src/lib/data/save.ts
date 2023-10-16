@@ -5,8 +5,8 @@ import { get } from "svelte/store";
 
 const save = async () => {
     // SAVE STORY
+    let storyUuid: string | null;
     let board = get(BoardStore);
-
 
     let story: StreamedStory = {
         uuid: board.cards[0].remote,
@@ -26,6 +26,7 @@ const save = async () => {
 
     board.cards[0].data = { title: story.title, description: story.description, active: story.active, assetId: story.assetId };
     board.cards[0].remote = story.uuid;
+    storyUuid = story.uuid;
 
     for (let card of board.cards) {
         if (!card.active && card.deleted) continue;
@@ -41,6 +42,26 @@ const save = async () => {
                 assetId: card.data.assetId,
                 waypoint: waypoint,
                 decisions: []
+            }
+
+            step = await (await useApi("/storystudio/steps/save", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(step)
+            })).json()
+
+            for (const anchor of card.anchors) {
+                if (anchor.type === "INPUT") continue;
+                const outputUuid = board.cards.find((card) => card.anchors.find((foreignAnchor) => foreignAnchor.id === anchor.connection && foreignAnchor.type === "INPUT"))?.remote;
+                const decision: StreamedDecision = {
+                    uuid: anchor.remote,
+                    title: "",
+                    stepInputUuid: step.uuid!,
+                    stepOutputUuid: outputUuid!,
+                }
+                step.decisions.push(decision);
             }
 
             step = await (await useApi("/storystudio/steps/save", {
@@ -69,6 +90,8 @@ const save = async () => {
             // TODO
         }
     }
+
+    return storyUuid;
 }
 
 export default save;

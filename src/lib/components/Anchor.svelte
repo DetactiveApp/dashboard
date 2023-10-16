@@ -22,6 +22,7 @@
       type: type,
       offset: rectCenter(),
       connection: null,
+      remote: null,
     };
 
     const mousemove = (e: MouseEvent) => {

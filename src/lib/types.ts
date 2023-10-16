@@ -16,6 +16,7 @@ export interface Anchor {
     type: "INPUT" | "OUTPUT"
     offset: [number, number],
     connection: [number, number] | null | "ON_CONNECT",
+    remote: string | null,
 }
 
 export interface BoardState {
