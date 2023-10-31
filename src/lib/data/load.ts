@@ -20,7 +20,6 @@ const load = async (storyUuid: string) => {
     board.cards[0].remote = story.uuid;
     board.cards[0].storyRemote = story.uuid;
 
-
     // LOAD STEP CARDS
     for (const [x, listStep] of stepsList.entries()) {
         let step: StreamedStep = await (await useApi(`/storystudio/steps/${listStep.uuid}/load`)).json();
@@ -37,13 +36,10 @@ const load = async (storyUuid: string) => {
             deleted: false
         };
 
-        console.log(step.decisions)
-
         for (const decision of step.decisions) {
-            connections.push([decision.stepInputUuid, decision.stepOutputUuid!, decision.uuid!]);
+            connections.push([decision.stepInputUuid!, decision.stepOutputUuid!, decision.uuid!]);
         }
 
-        board.cards.push(stepCard);
         step.decisions = step.decisions.filter((decision) => decision.stepInputUuid && decision.stepOutputUuid);
 
         if (step.decisions.length > 1) {
@@ -57,9 +53,12 @@ const load = async (storyUuid: string) => {
                 storyRemote: story.uuid,
                 deleted: false
             };
-            //board.cards.push(decisionCard);
+            board.cards.push(decisionCard);
+        } else {
+            board.cards.push(stepCard);
         }
     }
+
     // Update data & get anchors
     BoardStore.set(board);
     board = await get(BoardStore);
@@ -68,8 +67,8 @@ const load = async (storyUuid: string) => {
         const inputCardIndex = board.cards.findIndex((card) => card.active && !card.deleted && card.remote === connection[0]);
         const outputCardIndex = board.cards.findIndex((card) => card.active && !card.deleted && card.remote === connection[1]);
         if (inputCardIndex !== -1 && outputCardIndex !== -1) {
-            const outputAnchorIndex = board.cards[inputCardIndex].anchors.findIndex((anchor) => anchor.type === "OUTPUT");
-            const inputAnchorIndex = board.cards[outputCardIndex].anchors.findIndex((anchor) => anchor.type === "INPUT");
+            const outputAnchorIndex = board.cards[inputCardIndex].anchors.findIndex((anchor) => anchor.type === "OUTPUT" && anchor.connection === null);
+            const inputAnchorIndex = board.cards[outputCardIndex].anchors.findIndex((anchor) => anchor.type === "INPUT" && anchor.connection === null);
 
             board.cards[inputCardIndex].anchors[outputAnchorIndex].connection = [outputCardIndex, inputAnchorIndex]
             board.cards[inputCardIndex].anchors[outputAnchorIndex].remote = connection[2];

@@ -26,6 +26,16 @@
 
   onMount(async () => {
     await updateStories();
+
+    addEventListener("keydown", async (e) => {
+      if (e.ctrlKey && e.key === "s") {
+        e.preventDefault();
+        let storyUuid = await save();
+        await updateStories();
+        storyUuid ? await load(storyUuid) : null;
+        storySelector.value = storyUuid ?? stories[0].uuid;
+      }
+    });
   });
 </script>
 

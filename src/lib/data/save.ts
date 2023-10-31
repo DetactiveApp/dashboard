@@ -1,11 +1,9 @@
 import useApi from "$lib/hooks/useApi";
 import BoardStore from "$lib/stores/BoardStore";
 import type { StreamedDecision, StreamedStep, StreamedStory, StreamedWaypoint } from "$lib/types";
-import { tick } from "svelte";
 import { get } from "svelte/store";
 
 const save = async () => {
-
     // SAVE STORY
     let storyUuid: string | null;
     let board = get(BoardStore);
@@ -68,19 +66,52 @@ const save = async () => {
                 }
             };
             card.remote = step.uuid;
+        }
+    }
 
-            await tick();
+    // SAVE ALL DECISIONS
+    BoardStore.set(board);
+    for (let card of board.cards) {
+        if (!card.active && card.deleted) continue;
+        if (card.type === "STEP") {
+            const waypoint: StreamedWaypoint | null = card.data.waypoint.placeType === "none" ? null : { uuid: card.data.waypoint.remote ?? null, placeType: card.data.waypoint.placeType, placeOverride: card.data.waypoint.placeOverride ?? false };
 
-            // SAVE ALL DECISIONS
+            let step: StreamedStep = {
+                uuid: card.remote,
+                storyUuid: story.uuid!,
+                title: card.data.title,
+                description: card.data.description,
+                mediaType: card.data.mediaType === "NONE" ? null : card.data.mediaType,
+                assetId: card.data.assetId,
+                waypoint: waypoint,
+                decisions: []
+            }
+
             for (const anchor of card.anchors) {
                 if (anchor.type === "OUTPUT" && anchor.connection && step.uuid && anchor.connection[0] !== 0) {
-                    const decision: StreamedDecision = {
-                        uuid: anchor.remote,
-                        title: card.data.title,
-                        stepInputUuid: step.uuid,
-                        stepOutputUuid: board.cards[anchor.connection[0] as number].remote ?? null,
+                    const connectedCard = board.cards[anchor.connection[0] as number];
+                    if (connectedCard.type === "DECISION") {
+                        for (const nextAnchor of connectedCard.anchors) {
+                            if (nextAnchor.type === "OUTPUT" && nextAnchor.connection && nextAnchor.connection[0] !== 0) {
+                                const decision: StreamedDecision = {
+                                    uuid: connectedCard.remote,
+                                    title: connectedCard.data.titles[nextAnchor.id[1] - 1],
+                                    stepInputUuid: step.uuid,
+                                    stepOutputUuid: board.cards[nextAnchor.connection[0] as number].remote ?? null,
+                                }
+                                console.log(decision);
+                                step.decisions.push(decision);
+                            }
+                        }
+                    } else {
+                        const decision: StreamedDecision = {
+                            uuid: anchor.remote,
+                            title: card.data.title,
+                            stepInputUuid: step.uuid,
+                            stepOutputUuid: board.cards[anchor.connection[0] as number].remote ?? null,
+                        }
+                        step.decisions.push(decision);
                     }
-                    step.decisions.push(decision);
                 }
             }
 
@@ -93,6 +124,7 @@ const save = async () => {
             })).json()
         }
     }
+
     return storyUuid;
 }
 

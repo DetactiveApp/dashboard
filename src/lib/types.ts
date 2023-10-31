@@ -12,6 +12,7 @@ export interface Card {
 }
 
 export interface Anchor {
+    // cardId, anchorId
     id: [number, number],
     type: "INPUT" | "OUTPUT"
     offset: [number, number],
