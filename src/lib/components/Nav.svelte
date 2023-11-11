@@ -24,16 +24,20 @@
     stories = stories.concat(streamedStories);
   };
 
+  const saveStory = async () => {
+    let storyUuid = await save();
+    await updateStories();
+    storyUuid ? await load(storyUuid) : null;
+    storySelector.value = storyUuid ?? stories[0].uuid;
+  };
+
   onMount(async () => {
     await updateStories();
 
     addEventListener("keydown", async (e) => {
       if (e.ctrlKey && e.key === "s") {
         e.preventDefault();
-        let storyUuid = await save();
-        await updateStories();
-        storyUuid ? await load(storyUuid) : null;
-        storySelector.value = storyUuid ?? stories[0].uuid;
+        await saveStory();
       }
     });
   });
@@ -67,10 +71,7 @@
     <button
       class="ml-1 hover:bg-green-500 hover:text-white rounded-md"
       on:click={async () => {
-        let storyUuid = await save();
-        await updateStories();
-        storyUuid ? await load(storyUuid) : null;
-        storySelector.value = storyUuid ?? stories[0].uuid;
+        await saveStory();
       }}>SAVE STORY</button
     >
 
