@@ -51,8 +51,6 @@ const save = async () => {
                 body: JSON.stringify(step),
             })).json();
 
-            console.log(step.waypoint);
-
             card.data = {
                 title: step.title,
                 description: step.description,
@@ -115,7 +113,6 @@ const save = async () => {
                 }
             }
 
-            console.log(step.waypoint);
             await (await useApi("/storystudio/steps/save", {
                 method: "POST",
                 headers: {

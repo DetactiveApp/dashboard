@@ -1,27 +1,8 @@
-<script lang="ts">
-  import Board from "$lib/components/Board.svelte";
-  import Nav from "$lib/components/Nav.svelte";
-
-  import BoardStore from "$lib/stores/BoardStore";
-  import { cardMappings } from "$lib/utils/cardMappings";
-</script>
-
-<svelte:head>
-  <title>Detactive Storystudio</title>
-</svelte:head>
-
 <main
-  class="flex flex-col items-center justify-center overflow-hidden w-screen h-screen"
-  on:contextmenu={(e) => {
-    e.preventDefault();
-  }}
+  class="w-full h-full flex flex-col items-center justify-center text-center"
 >
-  <Nav />
-  <Board>
-    {#each $BoardStore.cards as card, i}
-      {#if !card.deleted}
-        <svelte:component this={cardMappings[card.type]} index={i} />
-      {/if}
-    {/each}
-  </Board>
+  <h1 class="text-3xl m-auto">StoryStudio</h1>
+  <div class="border-black border-4 rounded-md p-0.5">
+    <input class="outline-none" type="password" placeholder="Key" />
+  </div>
 </main>
