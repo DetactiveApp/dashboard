@@ -4,6 +4,7 @@
   import BoardStore from "$lib/stores/BoardStore";
   import { initDecisionCard, initStepCard } from "$lib/utils/initCards";
   import type { Card } from "$lib/types";
+  import titleCase from "$lib/utils/titleCase";
 
   export let clientX: number;
   export let clientY: number;
@@ -22,12 +23,6 @@
     START: initStepCard,
     STEP: initStepCard,
     DECISION: initDecisionCard,
-  };
-
-  const titleCase = (str: string) => {
-    return str.replace(/\w\S*/g, (t) => {
-      return t.charAt(0).toUpperCase() + t.substring(1).toLowerCase();
-    });
   };
 
   const createCard = (cardTitle: string) => {

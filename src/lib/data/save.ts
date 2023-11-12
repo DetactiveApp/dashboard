@@ -1,6 +1,7 @@
 import useApi from "$lib/hooks/useApi";
 import BoardStore from "$lib/stores/BoardStore";
 import type { StreamedDecision, StreamedStep, StreamedStory, StreamedWaypoint } from "$lib/types";
+import titleCase from "$lib/utils/titleCase";
 import { get } from "svelte/store";
 
 const save = async () => {
@@ -41,7 +42,6 @@ const save = async () => {
     for (let card of board.cards) {
         if (!card.active) continue;
         if (card.deleted) {
-            console.log(card);
             if (card.remote) {
                 await useApi(`/storystudio/steps/${card.remote}/remove`, { method: "DELETE" });
             }
@@ -54,11 +54,13 @@ const save = async () => {
                 storyUuid: story.uuid!,
                 title: card.data.title,
                 description: card.data.description,
-                mediaType: card.data.mediaType === "NONE" ? null : card.data.mediaType,
+                mediaType: card.data.mediaType === "NONE" ? null : titleCase(card.data.mediaType),
                 assetId: card.data.assetId,
                 waypoint: waypoint,
                 decisions: [],
             };
+
+            console.log(step)
 
             step = await (await useApi("/storystudio/steps/save", {
                 method: "POST",
@@ -71,7 +73,7 @@ const save = async () => {
             card.data = {
                 title: step.title,
                 description: step.description,
-                mediaType: step.mediaType ?? "NONE",
+                mediaType: step.mediaType?.toUpperCase() ?? "NONE",
                 assetId: step.assetId,
                 waypoint: {
                     remote: step.waypoint?.uuid,
@@ -90,7 +92,6 @@ const save = async () => {
         if (stepCard.deleted) continue;
         if (stepCard.type === "STEP") {
             if (!stepCard.active && stepCard.remote != null) {
-                console.log(stepCard)
                 await (await useApi(`/storystudio/steps/remove/${stepCard.remote}`, { method: "DELETE" })).json();
                 continue;
             }

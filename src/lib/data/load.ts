@@ -28,7 +28,7 @@ const load = async (storyUuid: string) => {
         const stepCard: Card = {
             active: false,
             type: "STEP",
-            data: { title: step.title, description: step.description, mediaType: step.mediaType ?? "NONE", assetId: step.assetId, waypoint: waypoint },
+            data: { title: step.title, description: step.description, mediaType: step.mediaType?.toUpperCase() ?? "NONE", assetId: step.assetId, waypoint: waypoint },
             offset: cardPosition,
             anchors: [],
             remote: step.uuid,
