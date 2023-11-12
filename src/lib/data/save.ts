@@ -29,7 +29,14 @@ const save = async () => {
 
     // SAVE CARDS
     for (let card of board.cards) {
-        if (!card.active && card.deleted) continue;
+        if (!card.active) continue;
+        if (card.deleted) {
+            console.log(card);
+            if (card.remote) {
+                await useApi(`/storystudio/steps/${card.remote}/remove`, { method: "DELETE" });
+            }
+            continue;
+        };
         if (card.type === "STEP") {
             const waypoint: StreamedWaypoint | null = card.data.waypoint.placeType === "none" ? null : { uuid: card.data.waypoint.remote ?? null, placeType: card.data.waypoint.placeType, placeOverride: card.data.waypoint.placeOverride ?? false };
             let step: StreamedStep = {
@@ -70,8 +77,14 @@ const save = async () => {
 
     // SAVE ALL DECISIONS
     for (let stepCard of board.cards) {
-        if (!stepCard.active && stepCard.deleted) continue;
+        if (stepCard.deleted) continue;
         if (stepCard.type === "STEP") {
+            if (!stepCard.active && stepCard.remote != null) {
+                console.log(stepCard)
+                await (await useApi(`/storystudio/steps/remove/${stepCard.remote}`, { method: "DELETE" })).json();
+                continue;
+            }
+
             const waypoint: StreamedWaypoint | null = stepCard.data.waypoint.placeType === "none" ? null : { uuid: stepCard.data.waypoint.remote ?? null, placeType: stepCard.data.waypoint.placeType, placeOverride: stepCard.data.waypoint.placeOverride ?? false };
             let step: StreamedStep = {
                 uuid: stepCard.remote,
@@ -83,8 +96,6 @@ const save = async () => {
                 waypoint: waypoint,
                 decisions: [],
             };
-
-
 
             for (const anchor of stepCard.anchors) {
                 if (anchor.type === "OUTPUT" && anchor.connection && step.uuid && anchor.connection[0] !== 0) {

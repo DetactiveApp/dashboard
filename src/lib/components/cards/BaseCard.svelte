@@ -10,6 +10,7 @@
   let deltaMouse: [number, number] = [0, 0];
 
   onMount(() => {
+    $BoardStore.cards[cardId].active = true;
     card.style.left = `${$BoardStore.cards[cardId].offset[0]}px`;
     card.style.top = `${$BoardStore.cards[cardId].offset[1]}px`;
     addEventListener("mousemove", (e) => {
@@ -25,10 +26,9 @@
     addEventListener("mouseup", () => {
       isDragging = false;
     });
-    $BoardStore.cards[cardId].active = true;
 
     return () => {
-      $BoardStore.cards[cardId].active = false;
+      $BoardStore.cards[cardId].deleted = true;
     };
   });
 </script>
