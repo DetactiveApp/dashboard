@@ -7,6 +7,14 @@ const save = async () => {
     // SAVE STORY
     let board = get(BoardStore);
 
+    for (let card of board.cards) {
+        for (let anchor of card.anchors) {
+            if (anchor.type === "INPUT" && anchor.connection === null) {
+                return alert("Please connect all anchors before saving.");
+            }
+        }
+    }
+
     let story: StreamedStory = {
         uuid: board.cards[0].remote,
         title: board.cards[0].data.title,

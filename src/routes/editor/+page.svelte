@@ -10,20 +10,18 @@
   <title>Detactive Storystudio</title>
 </svelte:head>
 
-{#if true}
-  <main
-    class="flex flex-col items-center justify-center overflow-hidden w-screen h-screen"
-    on:contextmenu={(e) => {
-      e.preventDefault();
-    }}
-  >
-    <Nav />
-    <Board>
-      {#each $BoardStore.cards as card, i}
-        {#if !card.deleted}
-          <svelte:component this={cardMappings[card.type]} index={i} />
-        {/if}
-      {/each}
-    </Board>
-  </main>
-{/if}
+<main
+  class="flex flex-col items-center justify-center overflow-hidden w-screen h-screen"
+  on:contextmenu={(e) => {
+    e.preventDefault();
+  }}
+>
+  <Nav />
+  <Board>
+    {#each $BoardStore.cards as card, i}
+      {#if !card.deleted}
+        <svelte:component this={cardMappings[card.type]} index={i} />
+      {/if}
+    {/each}
+  </Board>
+</main>
