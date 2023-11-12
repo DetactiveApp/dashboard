@@ -8,6 +8,7 @@
   import reset from "$lib/data/reset";
   import save from "$lib/data/save";
   import remove from "$lib/data/remove";
+  import { version } from "$app/environment";
 
   let storySelector: HTMLSelectElement;
   let stories: { title: string; uuid: string }[] = [];
@@ -44,7 +45,7 @@
 </script>
 
 <nav
-  class="flex text-xl text-center justify-start items-center h-fit w-screen bg-white mt-9 z-50 border-green-500 border-b-4"
+  class="fixed flex text-xl text-center justify-start items-center h-fit w-full bg-white z-50 border-green-500 border-b-4"
 >
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
@@ -69,19 +70,23 @@
     </select>
 
     <button
-      class="ml-1 hover:bg-green-500 hover:text-white rounded-md"
+      class=" hover:bg-green-500 hover:text-white rounded-md"
       on:click={async () => {
         await saveStory();
       }}>SAVE STORY</button
     >
 
     <button
-      class="ml-1 hover:bg-red-500 hover:text-white rounded-md"
+      class=" hover:bg-red-500 hover:text-white rounded-md"
       on:click={async () => {
         await remove();
         await reset();
         await updateStories();
       }}>REMOVE STORY</button
     >
+  </div>
+
+  <div class="flex flex-row justify-end w-full">
+    <p>v{version}</p>
   </div>
 </nav>
