@@ -1,8 +1,7 @@
-const DEBUG = true
-const apiUrl = DEBUG ? "http://localhost:3000/v1" : "https://test-api.detactive.de/v1"
+import { PUBLIC_API_URL } from '$env/static/public';
 
 const useApi = async (path: string, requestInit?: RequestInit) => {
-    return await fetch(apiUrl + path, requestInit)
+    return await fetch(PUBLIC_API_URL + path, requestInit)
 }
 
 export default useApi;
