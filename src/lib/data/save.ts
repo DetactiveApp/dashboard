@@ -8,9 +8,11 @@ const save = async () => {
     let board = get(BoardStore);
 
     for (let card of board.cards) {
-        for (let anchor of card.anchors) {
-            if (anchor.type === "INPUT" && anchor.connection === null) {
-                return alert("Please connect all anchors before saving.");
+        if (card.active && !card.deleted) {
+            for (let anchor of card.anchors) {
+                if (anchor.type === "INPUT" && anchor.connection === null) {
+                    return alert("Please connect all anchors before saving.");
+                }
             }
         }
     }
