@@ -8,14 +8,20 @@ const save = async () => {
     // SAVE STORY
     let board = get(BoardStore);
 
+    let connectedCards: number = 0;
     for (let card of board.cards) {
         if (card.active && !card.deleted) {
             for (let anchor of card.anchors) {
                 if (anchor.type === "INPUT" && anchor.connection === null) {
                     return alert("Please connect all anchors before saving.");
                 }
+                if (anchor.connection && anchor.type == "OUTPUT") connectedCards++;
             }
         }
+    }
+
+    if (connectedCards < 2 && board.cards[0].active) {
+        return alert("A story needs a minimun of 2 connected cards to be playable (active).");
     }
 
     let story: StreamedStory = {
@@ -59,8 +65,6 @@ const save = async () => {
                 waypoint: waypoint,
                 decisions: [],
             };
-
-            console.log(step)
 
             step = await (await useApi("/storystudio/steps/save", {
                 method: "POST",

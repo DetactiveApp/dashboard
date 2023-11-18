@@ -49,7 +49,7 @@
 >
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-  <div class="flex flex-row justify-center items-center gap-10">
+  <div class="flex flex-row justify-center items-center gap-10 w-11/12">
     <img
       on:click={debugClick}
       class="w-7 h-7"
@@ -84,9 +84,7 @@
         await updateStories();
       }}>REMOVE STORY</button
     >
-  </div>
 
-  <div class="flex flex-row justify-end w-full">
     <p>v{version}</p>
   </div>
 </nav>
