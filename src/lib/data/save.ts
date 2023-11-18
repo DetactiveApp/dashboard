@@ -26,7 +26,7 @@ const save = async () => {
 
     if (board.cards[0].data.active) {
         if (connectedCards < 2) {
-            return alert("A story needs a minimun of 2 connected cards to be playable (active).");
+            return alert("A story needs a minimun of 2 connected steps to be playable (active).");
         }
 
         if (board.cards[0].data.assetId === "") {
