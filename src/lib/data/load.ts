@@ -21,8 +21,11 @@ const load = async (storyUuid: string) => {
     board.cards[0].storyRemote = story.uuid;
 
     // LOAD STEP CARDS
-    for (const [x, listStep] of stepsList.entries()) {
+    let x = 0;
+    for (const listStep of stepsList) {
         let step: StreamedStep = await (await useApi(`/storystudio/steps/${listStep.uuid}/load`)).json();
+
+        // STEP CARD
         const cardPosition: [number, number] = [board.cards[0].offset[0] + (x + 1) * CARDS_X_OFFSET, board.cards[0].offset[1]];
         const waypoint = step.waypoint ? { remote: step.waypoint.uuid, placeType: step.waypoint.placeType, placeOverride: step.waypoint.placeOverride ?? false } : { remote: null, placeType: "none", placeOverride: false };
         const stepCard: Card = {
@@ -36,26 +39,35 @@ const load = async (storyUuid: string) => {
             deleted: false
         };
 
-        for (const decision of step.decisions) {
-            connections.push([decision.stepInputUuid!, decision.stepOutputUuid!, decision.uuid!]);
-        }
+        board.cards.push(stepCard);
+        x++;
 
-        step.decisions = step.decisions.filter((decision) => decision.stepInputUuid && decision.stepOutputUuid);
-
+        // DECISION CARD
         if (step.decisions.length > 1) {
+            const cardPosition: [number, number] = [board.cards[0].offset[0] + (x + 1) * CARDS_X_OFFSET, board.cards[0].offset[1]];
             const decisionCard: Card = {
                 active: false,
                 type: "DECISION",
                 data: { titles: step.decisions.map((decision) => decision.title) },
                 offset: cardPosition,
                 anchors: [],
-                remote: step.uuid,
+                remote: "D:" + step.uuid,
                 storyRemote: story.uuid,
                 deleted: false
             };
             board.cards.push(decisionCard);
+
+            // STEP CARD CONNECTIONS + DECISION CARD CONNECTIONS
+            connections.push([step.uuid!, decisionCard.remote!, "D:" + step.uuid]);
+            for (const decision of step.decisions) {
+                connections.push([decisionCard.remote!, decision.stepOutputUuid!, decision.uuid!]);
+            }
+            x++;
         } else {
-            board.cards.push(stepCard);
+            // STEP CARD CONNECTIONS
+            for (const decision of step.decisions) {
+                connections.push([decision.stepInputUuid!, decision.stepOutputUuid!, decision.uuid!]);
+            }
         }
     }
 

@@ -146,6 +146,16 @@
         return;
       }
 
+      if (
+        $BoardStore.cards[connectionCardId].anchors[connectionAnchorId].type ===
+        $BoardStore.cards[cardId].anchors[anchorId].type
+      ) {
+        $BoardStore.cards[connectionCardId].anchors[
+          connectionAnchorId
+        ].connection = null;
+        return;
+      }
+
       $BoardStore.cards[connectionCardId].anchors[
         connectionAnchorId
       ].connection = [cardId, anchorId];
