@@ -127,7 +127,7 @@ const save = async () => {
                     const connectedCard = board.cards[anchor.connection[0] as number];
                     if (connectedCard.type === "DECISION") {
                         for (const nextAnchor of connectedCard.anchors) {
-                            if (nextAnchor.type === "OUTPUT" && nextAnchor.connection && nextAnchor.connection[0] !== 0) {
+                            if (nextAnchor.type === "OUTPUT" && nextAnchor.connection && nextAnchor.connection[0] !== 0 && !connectedCard.remote?.startsWith("D:")) {
                                 const decision: StreamedDecision = {
                                     uuid: connectedCard.remote,
                                     title: connectedCard.data.titles[nextAnchor.id[1] - 1],
