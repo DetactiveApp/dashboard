@@ -69,6 +69,8 @@ const load = async (storyUuid: string) => {
                 connections.push([decision.stepInputUuid!, decision.stepOutputUuid!, decision.uuid!]);
             }
         }
+
+        console.log(connections)
     }
 
     // Update data & get anchors
