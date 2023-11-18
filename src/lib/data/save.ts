@@ -20,15 +20,18 @@ const save = async () => {
         }
     }
 
-    if (connectedCards < 2 && board.cards[0].active) {
-        return alert("A story needs a minimun of 2 connected cards to be playable (active).");
+    if (board.cards[0].anchors[0].connection?.[0] && board.cards[board.cards[0].anchors[0].connection?.[0] as number] && board.cards[board.cards[0].anchors[0].connection?.[0] as number].type !== "STEP") {
+        return alert("The first card of a story must be a step.");
     }
 
-    const firstCard = board.cards[0].anchors[0].connection![0] as number;
+    if (board.cards[0].data.active) {
+        if (connectedCards < 2) {
+            return alert("A story needs a minimun of 2 connected cards to be playable (active).");
+        }
 
-
-    if (board.cards[firstCard] && board.cards[firstCard].type !== "STEP") {
-        return alert("The first card of a story must be a step.");
+        if (board.cards[0].data.assetId === "") {
+            return alert("The story needs a background image to be playable (active).");
+        }
     }
 
     let story: StreamedStory = {
