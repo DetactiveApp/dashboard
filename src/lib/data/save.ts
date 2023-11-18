@@ -24,6 +24,13 @@ const save = async () => {
         return alert("A story needs a minimun of 2 connected cards to be playable (active).");
     }
 
+    const firstCard = board.cards[0].anchors[0].connection![0] as number;
+
+
+    if (board.cards[firstCard] && board.cards[firstCard].type !== "STEP") {
+        return alert("The first card of a story must be a step.");
+    }
+
     let story: StreamedStory = {
         uuid: board.cards[0].remote,
         title: board.cards[0].data.title,
