@@ -167,5 +167,5 @@
     }
   }}
 >
-  <div class="w-5 h-5 bg-white rounded-full border-4 border-green-500" />
+  <div class="w-5 h-5 bg-white rounded-full border-4 border-primary" />
 </main>

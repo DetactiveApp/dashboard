@@ -38,10 +38,10 @@
 
 <main bind:this={menu} class="absolute overflow-hidden">
   <div
-    class="flex flex-col w-32 h-36 bg-neutral-200 rounded-lg border-green-500 border-4"
+    class="flex flex-col w-32 h-36 bg-surface rounded-lg border-primary border-4"
   >
     {#each cardTitles as cardTitle}
-      <div class="hover:bg-neutral-300 w-full">
+      <div class="hover:text-primary w-full">
         <button
           class="w-full h-full text-left"
           on:mousedown={(e) => {

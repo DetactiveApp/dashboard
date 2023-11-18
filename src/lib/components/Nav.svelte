@@ -45,7 +45,7 @@
 </script>
 
 <nav
-  class="fixed flex text-xl text-center justify-start items-center h-fit w-full bg-white z-50 border-green-500 border-b-4"
+  class="fixed flex text-xl text-center justify-start items-center h-fit w-full bg-white z-50 border-primary border-b-4"
 >
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
@@ -70,14 +70,14 @@
     </select>
 
     <button
-      class=" hover:bg-green-500 hover:text-white rounded-md"
+      class="hover:text-primary rounded-md"
       on:click={async () => {
         await saveStory();
       }}>SAVE STORY</button
     >
 
     <button
-      class=" hover:bg-red-500 hover:text-white rounded-md"
+      class="hover:text-primary rounded-md"
       on:click={async () => {
         await remove();
         await reset();
