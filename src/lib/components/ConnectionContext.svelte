@@ -29,15 +29,15 @@
               cx={$BoardStore.cards[cardId].anchors[anchorId].offset[0]}
               cy={$BoardStore.cards[cardId].anchors[anchorId].offset[1]}
               r={4}
-              class="fill-green-500"
+              class="fill-primary"
             />
-            <circle cx={clientX} cy={clientY} r={4} class="fill-green-500" />
+            <circle cx={clientX} cy={clientY} r={4} class="fill-primary" />
             <line
               x1={$BoardStore.cards[cardId].anchors[anchorId].offset[0]}
               y1={$BoardStore.cards[cardId].anchors[anchorId].offset[1]}
               x2={clientX}
               y2={clientY}
-              class="stroke-green-500"
+              class="stroke-primary"
               style="stroke-width: 8;"
             />
           {:else}
@@ -45,7 +45,7 @@
               cx={$BoardStore.cards[cardId].anchors[anchorId].offset[0]}
               cy={$BoardStore.cards[cardId].anchors[anchorId].offset[1]}
               r={4}
-              class="fill-green-500"
+              class="stroke-primary"
             />
             <circle
               cx={$BoardStore.cards[anchor.connection[0]].anchors[
@@ -55,7 +55,7 @@
                 anchor.connection[1]
               ].offset[1]}
               r={4}
-              class="fill-green-500"
+              class="stroke-primary"
             />
             <line
               x1={$BoardStore.cards[cardId].anchors[anchorId].offset[0]}
@@ -66,7 +66,7 @@
               y2={$BoardStore.cards[anchor.connection[0]].anchors[
                 anchor.connection[1]
               ].offset[1]}
-              class="stroke-green-500"
+              class="stroke-primary"
               style="stroke-width: 8;"
             />
           {/if}

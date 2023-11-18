@@ -50,7 +50,7 @@
     e.preventDefault();
     cardId !== 0 ? ($BoardStore.cards[cardId].deleted = true) : null;
   }}
-  class="absolute flex flex-col items-center w-72 h-fit overflow-hidden bg-neutral-200 border-4 border-green-500 rounded-3xl drop-shadow-2xl pb-3"
+  class="absolute flex flex-col items-center w-72 h-fit overflow-hidden bg-surface border-4 border-primary rounded-3xl drop-shadow-2xl pb-3"
 >
   <header class="h-fit w-full flex justify-center">
     <h1 class="text-lg">{title}</h1>
