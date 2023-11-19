@@ -45,7 +45,7 @@
               cx={$BoardStore.cards[cardId].anchors[anchorId].offset[0]}
               cy={$BoardStore.cards[cardId].anchors[anchorId].offset[1]}
               r={4}
-              class="stroke-primary"
+              class="fill-primary"
             />
             <circle
               cx={$BoardStore.cards[anchor.connection[0]].anchors[
@@ -55,7 +55,7 @@
                 anchor.connection[1]
               ].offset[1]}
               r={4}
-              class="stroke-primary"
+              class="fill-primary"
             />
             <line
               x1={$BoardStore.cards[cardId].anchors[anchorId].offset[0]}
