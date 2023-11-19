@@ -29,7 +29,6 @@
     let storyUuid = await save();
     await updateStories();
     storySelector.value = storyUuid ?? stories[0].uuid;
-    alert("Story saved!");
   };
 
   onMount(async () => {
