@@ -60,6 +60,7 @@ const save = async () => {
         if (card.deleted) {
             if (card.remote) {
                 await useApi(`/storystudio/steps/${card.remote}/remove`, { method: "DELETE" });
+                card.active = false;
             }
             continue;
         };
