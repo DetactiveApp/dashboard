@@ -28,8 +28,8 @@
   const saveStory = async () => {
     let storyUuid = await save();
     await updateStories();
-    storyUuid ? await load(storyUuid) : null;
     storySelector.value = storyUuid ?? stories[0].uuid;
+    alert("Story saved!");
   };
 
   onMount(async () => {
