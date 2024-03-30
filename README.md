@@ -1,8 +1,1 @@
-# storystudio
-
-```bash
-npm i
-```
-```bash
-npm run dev
-```
+Only for local use YET...

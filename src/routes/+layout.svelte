@@ -1,9 +1,12 @@
-<script lang="ts">
-  import "../app.css";
-  import favicon from "$lib/assets/favicon.ico";
+<script>
+	import 'mapbox-gl/dist/mapbox-gl.css';
+	import 'tailwindcss/tailwind.css';
 </script>
 
-<svelte:head>
-  <link rel="icon" type="image/svg" href={favicon} />
+<svelte:head >
+	<title>Detactive Dashboard</title>
 </svelte:head>
-<slot />
+
+<main class="w-full h-full top-0 left-0 right-0 bottom-0 overflow-x-hidden">
+	<slot />
+</main>
