@@ -8,6 +8,11 @@
 
 <svelte:window bind:innerWidth bind:innerHeight />
 
+<svelte:head>
+    <title>Detactive Dashboard</title>
+</svelte:head>
+
+
 <main>
 	<NavBar />
 	<div class="flex justify-center">

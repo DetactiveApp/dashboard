@@ -12,7 +12,7 @@
             accessToken: PUBLIC_MAPBOX_KEY,
             style: `mapbox://styles/mapbox/dark-v11`,
             center: [10.45411064478481, 51.164221896294045],
-            zoom: 6,
+            zoom: 5,
         });
 
         const mapContext = await getMap();
