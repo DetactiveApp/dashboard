@@ -4,37 +4,6 @@
   "version": "5",
   "dialect": "pg",
   "tables": {
-    "itemTypes": {
-      "name": "itemTypes",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(32)",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "itemTypes_name_unique": {
-          "columns": [
-            "name"
-          ],
-          "nullsNotDistinct": false,
-          "name": "itemTypes_name_unique"
-        }
-      }
-    },
     "items": {
       "name": "items",
       "schema": "",
@@ -164,6 +133,44 @@
           ],
           "nullsNotDistinct": false,
           "name": "users_username_unique"
+        }
+      }
+    },
+    "itemTypes": {
+      "name": "itemTypes",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(32)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "spawnProbability": {
+          "name": "spawnProbability",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "nextval('\"itemTypes_spawnProbability_seq\"'::regclass)"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "itemTypes_name_unique": {
+          "columns": [
+            "name"
+          ],
+          "nullsNotDistinct": false,
+          "name": "itemTypes_name_unique"
         }
       }
     }

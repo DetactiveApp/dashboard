@@ -7,12 +7,6 @@ EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "itemTypes" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"name" varchar(32) NOT NULL,
-	CONSTRAINT "itemTypes_name_unique" UNIQUE("name")
-);
---> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "items" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"itemType" uuid,
@@ -30,6 +24,13 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"authority" "authority" NOT NULL,
 	"position" jsonb,
 	CONSTRAINT "users_username_unique" UNIQUE("username")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "itemTypes" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"name" varchar(32) NOT NULL,
+	"spawnProbability" real DEFAULT nextval('"itemTypes_spawnProbability_seq"'::regclass) NOT NULL,
+	CONSTRAINT "itemTypes_name_unique" UNIQUE("name")
 );
 --> statement-breakpoint
 DO $$ BEGIN
