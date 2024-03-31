@@ -4,23 +4,26 @@ import { DATABASE_URL } from "$env/static/private";
 import { json, type RequestHandler } from "@sveltejs/kit";
 
 import * as schema from "../../../../drizzle/schema";
+import { eq } from 'drizzle-orm';
+import type { Item } from '../../../types';
 
 const sql = neon(DATABASE_URL);
 const db = drizzle(sql, { schema });
 
 export const GET: RequestHandler = async () => {
-    return json({})
+    const items: Item[] = await db.query.itemTypes.findMany()
+    return json(items)
 }
 
 export const POST: RequestHandler = async ({ request }) => {
-    const item = await request.json();
+    let itemType: Item = await request.json();
 
-    if (item.id) {
-
+    if (itemType.id) {
+        itemType = (await db.update(schema.itemTypes).set({ name: itemType.name!, spawnProbability: itemType.spawnProbability! }).where(eq(schema.itemTypes.id, itemType.id)).returning().execute())[0]
     } else {
-        await db.insert(schema.itemTypes).values({ name: item.name, spawnProbability: item.spawnProbability }).execute()
+        itemType = (await db.insert(schema.itemTypes).values({ name: itemType.name!, spawnProbability: itemType.spawnProbability! }).returning().execute())[0]
     }
 
-    return json({});
+    return json(itemType);
 }
 
