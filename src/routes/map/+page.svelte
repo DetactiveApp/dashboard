@@ -10,9 +10,10 @@
         map = new mapboxgl.Map({
             container: mapContainer,
             accessToken: PUBLIC_MAPBOX_KEY,
-            style: `mapbox://styles/mapbox/dark-v11`,
+            style: `mapbox://styles/maxx19/clugre6ee00bz01ntdpxr0wf7`,
             center: [10.45411064478481, 51.164221896294045],
-            zoom: 5,
+            zoom: 2,
+            attributionControl: false,
         });
 
         const mapContext = await getMap();

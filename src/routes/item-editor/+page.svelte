@@ -1,5 +1,5 @@
 <script lang="ts">
-    import NavBar from "../../components/NavBar.svelte";
+	import NavBar from "../../components/NavBar.svelte";
 	import { appStore } from "../../stores/appStore";
 
     const getItems =  async () => {

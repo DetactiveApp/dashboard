@@ -3,10 +3,6 @@
 	import 'tailwindcss/tailwind.css';
 </script>
 
-<svelte:head >
-	<title>Detactive Dashboard</title>
-</svelte:head>
-
 <main class="w-full h-full top-0 left-0 right-0 bottom-0 overflow-x-hidden">
 	<slot />
 </main>
