@@ -5,6 +5,25 @@
 
     let map: mapboxgl.Map;
     let mapContainer: HTMLDivElement;
+    let markers: mapboxgl.Marker[];
+
+    const init = async () => {
+        markers = []
+        
+        const mapContext = await getMap();
+
+        for (const i in mapContext.items) {
+            const item = mapContext.items[i]
+            const popup = new mapboxgl.Popup({
+                offset: 35
+            }).setHTML(`<p>Name: ${item.name}</p><p>Probability: ${item.spawnProbability * 100}%</p><p>Minutes left: ${new Date(item.expiration).getMinutes() - new Date().getMinutes()}</p>`);
+            const marker = new mapboxgl.Marker({color: 'orange'}).setPopup(popup)
+            .setLngLat([item.position.longitude, item.position.latitude])
+            .addTo(map);
+
+            markers.push(marker)
+        }
+    }
 
     onMount(async () => {
         map = new mapboxgl.Map({
@@ -16,17 +35,11 @@
             attributionControl: false,
         });
 
-        const mapContext = await getMap();
+        await init();
 
-        for (const i in mapContext.items) {
-            const item = mapContext.items[i]
-            const popup = new mapboxgl.Popup({
-                offset: 25
-            }).setHTML(`<p>Name: ${item.name}</p><p>Probability: ${item.spawnProbability * 100}%</p><p>Minutes left: ${new Date(item.expiration).getMinutes() - new Date().getMinutes()}</p>`);
-            new mapboxgl.Marker({color: 'orange'}).setPopup(popup)
-            .setLngLat([item.position.longitude, item.position.latitude])
-            .addTo(map)
-        }
+        setInterval(async () => {
+            await init();
+        }, 10000);
     })
 
 	async function getMap() {

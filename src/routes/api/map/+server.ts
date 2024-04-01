@@ -4,7 +4,6 @@ import { DATABASE_URL } from "$env/static/private";
 import { json, type RequestHandler } from "@sveltejs/kit";
 
 import * as schema from "../../../../drizzle/schema";
-import { count, isNull } from 'drizzle-orm';
 import type { Map } from '../../../types/Map';
 
 const sql = neon(DATABASE_URL);
