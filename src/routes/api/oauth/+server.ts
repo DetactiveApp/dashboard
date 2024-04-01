@@ -5,7 +5,7 @@ import { OAuth2Client } from "google-auth-library";
 import Config from "$lib/server/config.json"
 
 export const GET: RequestHandler = async ({ url, cookies }) => {
-    const redirectUrl = process.env.NODE_ENV === 'production' ? 'https://dashboard.detactive.de/api/oauth' : 'http://localhost:5173/api/oauth'
+    const redirectUrl = !dev ? 'https://dashboard.detactive.de/api/oauth' : 'http://localhost:5173/api/oauth'
     const code = await url.searchParams.get('code')
 
     try {
@@ -30,7 +30,7 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
             throw redirect(303, "/login")
         }
 
-        cookies.set('email', '', {
+        cookies.set('email', email as string, {
             path: '/',
             httpOnly: true,
             sameSite: 'strict',
@@ -38,9 +38,9 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
             maxAge: 60 * 60 * 24 * 30
         });
 
+        throw redirect(303, '/')
+
     } catch (err) {
         throw redirect(303, "/login")
     }
-
-    throw redirect(303, "/")
 }
