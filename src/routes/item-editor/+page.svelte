@@ -16,6 +16,8 @@
     const deleteItem =  async () => {
         await fetch("/api/items", {method: "DELETE", body: JSON.stringify($appStore.itemEditor.cItem)});
         $appStore.itemEditor.cItem.id = null
+        $appStore.itemEditor.cItem.name = ""
+        $appStore.itemEditor.cItem.spawnProbability = 0.0
     }
 
     onMount(async () => {
@@ -38,7 +40,7 @@
         <h1 class="text-3xl text-primary font-bold">Item Editor</h1>
         <div class="flex flex-col justify-evenly mt-10 gap-5 w-1/4">
             <div class="flex flex-col gap-5">
-                <input type="text" placeholder="Name" title="Name of the item" class="input input-bordered w-full max-w-xs" bind:this={nameInput} on:input={() => $appStore.itemEditor.cItem.name = nameInput.value} />
+                <input type="text" placeholder="Name" title="Name of the item" class="input input-bordered w-full max-w-xs" bind:value={$appStore.itemEditor.cItem.name} bind:this={nameInput} />
                 {#each sortedItems as item}
 				<button
 					on:click={() => {
@@ -50,10 +52,10 @@
 			    {/each}
                 <p>Spawn Probability: {Math.round($appStore.itemEditor.cItem?.spawnProbability * 100)}%</p>
                 <input type="range" min={0} max="100" value="0" class="range range-xs" title="Set the value for the spawn probability from 0.0 to 1.0" bind:this={pInput} on:input={() => $appStore.itemEditor.cItem.spawnProbability = +pInput.value / 100} />
-                <div class="flex flex-row items-start justify-start">
+                <div class="flex flex-row items-start justify-start gap-5">
                     <button class="btn w-fit" on:click={pushItem}>{$appStore.itemEditor.cItem?.id ? "Update" : "Push"}</button>
                     {#if $appStore.itemEditor.cItem?.id != null}
-                        <button class="btn w-fit">Delete</button>
+                        <button class="btn w-fit" on:click={deleteItem}>Delete</button>
                     {/if}
                 </div>
             </div>

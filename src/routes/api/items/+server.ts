@@ -27,3 +27,12 @@ export const POST: RequestHandler = async ({ request }) => {
     return json(itemType);
 }
 
+export const DELETE: RequestHandler = async ({ request }) => {
+    const itemType: Item = await request.json();
+
+    if (itemType.id) {
+        db.delete(schema.itemTypes).where(eq(schema.itemTypes.id, itemType.id)).execute()
+    }
+
+    return json({});
+}
