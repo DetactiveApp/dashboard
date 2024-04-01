@@ -20,7 +20,10 @@
 
         for (const i in mapContext.items) {
             const item = mapContext.items[i]
-            const marker = new mapboxgl.Marker({color: 'orange'})
+            const popup = new mapboxgl.Popup({
+                offset: 25
+            }).setHTML(`<p>Name: ${item.name}</p><p>Probability: ${item.spawnProbability * 100}%</p><p>Minutes left: ${new Date(item.expiration).getMinutes() - new Date().getMinutes()}</p>`);
+            new mapboxgl.Marker({color: 'orange'}).setPopup(popup)
             .setLngLat([item.position.longitude, item.position.latitude])
             .addTo(map)
         }

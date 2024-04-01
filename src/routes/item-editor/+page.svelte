@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { onMount } from "svelte";
 	import NavBar from "../../components/NavBar.svelte";
 	import { appStore } from "../../stores/appStore";
+	import type { Item } from "../../types";
 
     const getItems =  async () => {
         const items = await (await fetch("/api/items")).json();
@@ -13,13 +15,17 @@
 
     const deleteItem =  async () => {
         await fetch("/api/items", {method: "DELETE", body: JSON.stringify($appStore.itemEditor.cItem)});
-        $appStore.itemEditor.cItem = {"id": null, "name": null, "spawnProbability": null }
+        $appStore.itemEditor.cItem.id = null
     }
 
+    onMount(async () => {
+        items = await getItems();
+    })
+
+    let items: Item[] = []
+    let sortedItems: Item[] = []
     let nameInput: HTMLInputElement;
     let pInput: HTMLInputElement;
-
-
 </script>
 
 <svelte:head>
@@ -30,24 +36,26 @@
     <NavBar />
     <div class="flex flex-col items-center">
         <h1 class="text-3xl text-primary font-bold">Item Editor</h1>
-        <div class="flex flex-col justify-evenly mt-10 gap-5 w-3/4">
-            <div class="flex gap-5">
+        <div class="flex flex-col justify-evenly mt-10 gap-5 w-1/4">
+            <div class="flex flex-col gap-5">
                 <input type="text" placeholder="Name" title="Name of the item" class="input input-bordered w-full max-w-xs" bind:this={nameInput} on:input={() => $appStore.itemEditor.cItem.name = nameInput.value} />
-                <input type="number"  placeholder="Probability" title="Set the value for the spawn probability from 0.0 to 1.0" class="input input-bordered w-32" bind:this={pInput} on:input={async() => {
-                    if (+pInput.value > 1.0) {
-                        pInput.value = String(1.0)
-                    } else if (+pInput.value < 0.0) {
-                        pInput.value = String(0.0)
-                    }
-
-                    $appStore.itemEditor.cItem.spawnProbability = +pInput.value
-                }} />
-            </div>
-            <div class="flex flex-row items-start justify-start">
-                <button class="btn w-fit" on:click={pushItem}>{$appStore.itemEditor.cItem.id ? "Update" : "Push"}</button>
-                {#if $appStore.itemEditor.cItem.id != null}
-                    <button class="btn w-fit">Delete</button>
-                {/if}
+                {#each sortedItems as item}
+				<button
+					on:click={() => {
+						$appStore.itemEditor.cItem = item;
+						nameInput.value = item.name
+					}}
+					class="btn flex-0">{item.name}</button
+				>
+			    {/each}
+                <p>Spawn Probability: {Math.round($appStore.itemEditor.cItem?.spawnProbability * 100)}%</p>
+                <input type="range" min={0} max="100" value="0" class="range range-xs" title="Set the value for the spawn probability from 0.0 to 1.0" bind:this={pInput} on:input={() => $appStore.itemEditor.cItem.spawnProbability = +pInput.value / 100} />
+                <div class="flex flex-row items-start justify-start">
+                    <button class="btn w-fit" on:click={pushItem}>{$appStore.itemEditor.cItem?.id ? "Update" : "Push"}</button>
+                    {#if $appStore.itemEditor.cItem?.id != null}
+                        <button class="btn w-fit">Delete</button>
+                    {/if}
+                </div>
             </div>
         </div>
     </div>

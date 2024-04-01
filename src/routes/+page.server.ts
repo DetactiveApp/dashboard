@@ -6,4 +6,5 @@ export const load = ({ cookies }) => {
     if (!Config.authorizedEmails.includes(email as string)) {
         throw redirect(303, "/login")
     }
+
 }

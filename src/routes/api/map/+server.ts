@@ -19,7 +19,7 @@ export const GET: RequestHandler = async () => {
         let itemType = await db.query.itemTypes.findFirst({ where: (itemTypes, { eq }) => eq(itemTypes.id, item.itemType as string) });
 
         if (itemType && item.expiration && item.position) {
-            items.push({ id: item.id, name: itemType.name, position: item.position, expiration: item.expiration })
+            items.push({ id: item.id, name: itemType.name, position: item.position, expiration: item.expiration, spawnProbability: itemType.spawnProbability })
         }
     }
 

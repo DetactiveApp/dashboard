@@ -17,7 +17,6 @@
 	<NavBar />
 	<div class="flex justify-center">
 		<div class="flex flex-col items-center justify-center w-3/4" >
-	
 			<iframe class="rounded-xl" title="map" src="/map" width={innerWidth / 1.5} height={innerHeight / 1.3} />
 			<Stats />
 		</div>
