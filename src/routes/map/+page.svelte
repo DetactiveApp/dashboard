@@ -37,9 +37,9 @@
 
         await init();
 
-        setInterval(async () => {
-            await init();
-        }, 10000);
+        //setInterval(async () => {
+        //    await init();
+        //}, 10000);
     })
 
 	async function getMap() {
