@@ -4,7 +4,7 @@ import type { AppStore } from "../types/AppStore";
 export const appStore = writable<AppStore>(
     {
         itemEditor: {
-            cItem: { id: null, name: "dtcoin", spawnProbability: 0 }
+            cItem: { id: null, name: "", spawnProbability: 0 }
         }
     }
 )
