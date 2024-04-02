@@ -1,11 +1,10 @@
 <script lang="ts">
-	import { onMount } from "svelte";
 	import NavBar from "../../components/NavBar.svelte";
 	import { appStore } from "../../stores/appStore";
 	import type { Item } from "../../types";
 
-    const getItems =  async () => {
-        const items = await (await fetch("/api/items")).json();
+    const getItemsByName = async (name: string) => {
+        const items = await (await fetch(`/api/items?nameQuery=${name}`)).json();
         return items
     }
 
@@ -20,11 +19,6 @@
         $appStore.itemEditor.cItem.spawnProbability = 0.0
     }
 
-    onMount(async () => {
-        items = await getItems();
-    })
-
-    let items: Item[] = []
     let sortedItems: Item[] = []
     let nameInput: HTMLInputElement;
     let pInput: HTMLInputElement;
@@ -40,12 +34,21 @@
         <h1 class="text-3xl text-primary font-bold">Item Editor</h1>
         <div class="flex flex-col justify-evenly mt-10 gap-5 w-1/4">
             <div class="flex flex-col gap-5">
-                <input type="text" placeholder="Name" title="Name of the item" class="input input-bordered w-full max-w-xs" bind:value={$appStore.itemEditor.cItem.name} bind:this={nameInput} />
+                <input type="text" placeholder="Name" title="Name of the item" class="input input-bordered w-full max-w-xs" bind:value={$appStore.itemEditor.cItem.name} bind:this={nameInput} on:input={async () => {
+                    if (nameInput.value === '') {
+                        sortedItems = []
+                        $appStore.itemEditor.cItem.id = null
+                        return
+                    }
+                    sortedItems = await getItemsByName(nameInput.value)
+                }} />
                 {#each sortedItems as item}
 				<button
 					on:click={() => {
 						$appStore.itemEditor.cItem = item;
 						nameInput.value = item.name
+                        pInput.value = String(item.spawnProbability)
+                        sortedItems = []
 					}}
 					class="btn flex-0">{item.name}</button
 				>

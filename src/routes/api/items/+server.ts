@@ -4,13 +4,18 @@ import { DATABASE_URL } from "$env/static/private";
 import { json, type RequestHandler } from "@sveltejs/kit";
 
 import * as schema from "../../../../drizzle/schema";
-import { eq } from 'drizzle-orm';
+import { asc, eq } from 'drizzle-orm';
 import type { Item } from '../../../types';
 
 const sql = neon(DATABASE_URL);
 const db = drizzle(sql, { schema });
 
-export const GET: RequestHandler = async () => {
+export const GET: RequestHandler = async ({ url }) => {
+    const nameQuery = url.searchParams.get('nameQuery')
+    if (nameQuery) {
+        const items: Item[] = await db.query.itemTypes.findMany({ limit: 5, where: (itemTypes, { ilike }) => ilike(itemTypes.name, "%" + nameQuery as string + "%") })
+        return json(items)
+    }
     const items: Item[] = await db.query.itemTypes.findMany()
     return json(items)
 }
