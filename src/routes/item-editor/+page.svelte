@@ -38,7 +38,7 @@
     <div class="flex flex-col items-center">
         <h1 class="text-3xl text-primary font-bold">Item Editor</h1>
         <div class="flex flex-col justify-evenly mt-10 gap-5 w-1/4">
-            <div class="flex flex-col gap-5">
+            <div class="flex flex-col gap-3">
                 <input type="text" placeholder="Name" title="Name of the item" class="input input-bordered w-full max-w-xs" bind:value={$appStore.itemEditor.cItem.name} on:input={async () => {
                     if ($appStore.itemEditor.cItem.name === '') {
                         reset()
@@ -56,14 +56,21 @@
 				>
 			    {/each}
 
-                <p>Spawn Probability: {Math.round($appStore.itemEditor.cItem?.spawnProbability * 100)}%</p>
-                <input type="range" bind:value={$appStore.itemEditor.cItem.spawnProbability} min="0" max="1" step="0.01" class="range range-xs" title="Set the value for the spawn probability from 0.0 to 1.0" />
+                <div>
+                    <p>Spawn Probability: {Math.round($appStore.itemEditor.cItem?.spawnProbability * 100)}%</p>
+                    <input type="range" bind:value={$appStore.itemEditor.cItem.spawnProbability} min="0" max="1" step="0.01" class="range range-xs" title="Set the value for the spawn probability from 0.0 to 1.0" />
+                </div>
 
-                <p>Min Expiration</p>
+
+                <div class="flex items-center">
+                <p>Min Expiration:</p>
                 <input type="number" bind:value={$appStore.itemEditor.cItem.minExpiration} min="0" class="input" title="Set the minimum expiration of the item in minutes"/>    
+                </div>
 
+                <div class="flex items-center">
                 <p>Max Expiration</p>  
                 <input type="number"  bind:value={$appStore.itemEditor.cItem.maxExpiration} min="0" class="input" title="Set the maximum expiration of the item in minutes"/>    
+                </div>
 
                 <div class="flex flex-row items-start justify-start gap-5">
                     <button class="btn w-fit" on:click={pushItem}>{$appStore.itemEditor.cItem?.id ? "Update" : "Push"}</button>
