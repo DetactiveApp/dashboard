@@ -1,5 +1,7 @@
 export interface Item {
     id: string | null,
     name: string,
-    spawnProbability: number
+    spawnProbability: number,
+    minExpiration: number,
+    maxExpiration: number
 }

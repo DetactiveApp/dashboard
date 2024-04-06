@@ -8,20 +8,25 @@
         return items
     }
 
-    const pushItem =  async () => {
+    const pushItem = async () => {
         $appStore.itemEditor.cItem = await (await fetch("/api/items", {method: "POST", body: JSON.stringify($appStore.itemEditor.cItem)})).json();
     }
 
     const deleteItem =  async () => {
         await fetch("/api/items", {method: "DELETE", body: JSON.stringify($appStore.itemEditor.cItem)});
+        reset()
+    }
+
+    const reset = () => {
+        sortedItems = []
         $appStore.itemEditor.cItem.id = null
         $appStore.itemEditor.cItem.name = ""
         $appStore.itemEditor.cItem.spawnProbability = 0.0
+        $appStore.itemEditor.cItem.minExpiration = 10.0
+        $appStore.itemEditor.cItem.minExpiration = 60.0
     }
 
     let sortedItems: Item[] = []
-    let nameInput: HTMLInputElement;
-    let pInput: HTMLInputElement;
 </script>
 
 <svelte:head>
@@ -34,27 +39,32 @@
         <h1 class="text-3xl text-primary font-bold">Item Editor</h1>
         <div class="flex flex-col justify-evenly mt-10 gap-5 w-1/4">
             <div class="flex flex-col gap-5">
-                <input type="text" placeholder="Name" title="Name of the item" class="input input-bordered w-full max-w-xs" bind:value={$appStore.itemEditor.cItem.name} bind:this={nameInput} on:input={async () => {
-                    if (nameInput.value === '') {
-                        sortedItems = []
-                        $appStore.itemEditor.cItem.id = null
+                <input type="text" placeholder="Name" title="Name of the item" class="input input-bordered w-full max-w-xs" bind:value={$appStore.itemEditor.cItem.name} on:input={async () => {
+                    if ($appStore.itemEditor.cItem.name === '') {
+                        reset()
                         return
                     }
-                    sortedItems = await getItemsByName(nameInput.value)
+                    sortedItems = await getItemsByName($appStore.itemEditor.cItem.name)
                 }} />
                 {#each sortedItems as item}
 				<button
 					on:click={() => {
 						$appStore.itemEditor.cItem = item;
-						nameInput.value = item.name
-                        pInput.value = String(item.spawnProbability)
                         sortedItems = []
 					}}
 					class="btn flex-0">{item.name}</button
 				>
 			    {/each}
+
                 <p>Spawn Probability: {Math.round($appStore.itemEditor.cItem?.spawnProbability * 100)}%</p>
-                <input type="range" min={0} max="100" value="0" class="range range-xs" title="Set the value for the spawn probability from 0.0 to 1.0" bind:this={pInput} on:input={() => $appStore.itemEditor.cItem.spawnProbability = +pInput.value / 100} />
+                <input type="range" bind:value={$appStore.itemEditor.cItem.spawnProbability} min="0" max="1" step="0.01" class="range range-xs" title="Set the value for the spawn probability from 0.0 to 1.0" />
+
+                <p>Min Expiration</p>
+                <input type="number" bind:value={$appStore.itemEditor.cItem.minExpiration} min="0" class="input" title="Set the minimum expiration of the item in minutes"/>    
+
+                <p>Max Expiration</p>  
+                <input type="number"  bind:value={$appStore.itemEditor.cItem.maxExpiration} min="0" class="input" title="Set the maximum expiration of the item in minutes"/>    
+
                 <div class="flex flex-row items-start justify-start gap-5">
                     <button class="btn w-fit" on:click={pushItem}>{$appStore.itemEditor.cItem?.id ? "Update" : "Push"}</button>
                     {#if $appStore.itemEditor.cItem?.id != null}

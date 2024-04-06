@@ -24,9 +24,9 @@ export const POST: RequestHandler = async ({ request }) => {
     let itemType: Item = await request.json();
 
     if (itemType.id) {
-        itemType = (await db.update(schema.itemTypes).set({ name: itemType.name!, spawnProbability: itemType.spawnProbability! }).where(eq(schema.itemTypes.id, itemType.id)).returning().execute())[0]
+        itemType = (await db.update(schema.itemTypes).set({ name: itemType.name!, spawnProbability: itemType.spawnProbability!, minExpiration: itemType.minExpiration, maxExpiration: itemType.maxExpiration }).where(eq(schema.itemTypes.id, itemType.id)).returning().execute())[0]
     } else {
-        itemType = (await db.insert(schema.itemTypes).values({ name: itemType.name!, spawnProbability: itemType.spawnProbability! }).returning().execute())[0]
+        itemType = (await db.insert(schema.itemTypes).values({ name: itemType.name!, spawnProbability: itemType.spawnProbability!, minExpiration: itemType.minExpiration, maxExpiration: itemType.maxExpiration }).returning().execute())[0]
     }
 
     return json(itemType);
