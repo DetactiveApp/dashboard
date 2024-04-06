@@ -62,14 +62,16 @@
                 </div>
 
 
-                <div class="flex items-center">
-                <p>Min Expiration:</p>
-                <input type="number" bind:value={$appStore.itemEditor.cItem.minExpiration} min="0" class="input" title="Set the minimum expiration of the item in minutes"/>    
+                <div class="flex items-center justify-between">
+                    <p>Min Expiration:</p>
+                    <input type="number" bind:value={$appStore.itemEditor.cItem.minExpiration} min="0" class="input text-end" title="Set the minimum expiration of the item in minutes"/>    
+                    <p>minutes</p>
                 </div>
 
-                <div class="flex items-center">
-                <p>Max Expiration</p>  
-                <input type="number"  bind:value={$appStore.itemEditor.cItem.maxExpiration} min="0" class="input" title="Set the maximum expiration of the item in minutes"/>    
+                <div class="flex items-center justify-between">
+                    <p>Max Expiration:</p>  
+                    <input type="number"  bind:value={$appStore.itemEditor.cItem.maxExpiration} min="0" class="input text-end" title="Set the maximum expiration of the item in minutes"/>    
+                    <p>minutes</p>
                 </div>
 
                 <div class="flex flex-row items-start justify-start gap-5">
